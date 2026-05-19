@@ -326,12 +326,13 @@
         <span class="filtro-label">Tipo</span>
         <select id="filtroTipo" onchange="aplicarFiltros()">
           <option value="">Todos</option>
-          <option value="Cruz">Cruz</option>
-          <option value="Allen">Allen</option>
-          <option value="Hexagonal">Hexagonal</option>
+          <option value="Tornillo hexagonal">Tornillo hexagonal</option>
+          <option value="Tornillo allen">Tornillo allen</option>
+          <option value="Tornillo cruz">Tornillo cruz</option>
+          <option value="Tornillo plano">Tornillo plano</option>
           <option value="Tuerca">Tuerca</option>
-          <option value="Tuerca hex">Tuerca hex</option>
-          <option value="Tuerca allen">Tuerca allen</option>
+          <option value="Tuerca seguridad">Tuerca seguridad</option>
+          <option value="Tuerca mariposa">Tuerca mariposa</option>
         </select>
       </div>
       <div class="filtro-wrap">
@@ -345,10 +346,9 @@
       <div class="filtro-wrap">
         <span class="filtro-label">Material</span>
         <select id="filtroMaterial" onchange="aplicarFiltros()">
-          <option value="">Todos</option>
-          <option value="Acero">Acero</option>
           <option value="Inoxidable">Inoxidable</option>
           <option value="Galvanizado">Galvanizado</option>
+          <option value="Negro">Negro</option>
         </select>
       </div>
       <div class="filtro-wrap">
@@ -450,7 +450,7 @@ function normalizar(str) {
 const tipoIcon = t => {
   const n = normalizar(t);
   if (n.includes('allen'))  return '⬡';
-  if (n.includes('cruz'))   return '✚';
+  if (n.includes('cruz') || n.includes('plano'))   return '✚';
   if (n.includes('hex'))    return '⬢';
   if (n.includes('tuerca')) return '◉';
   return '🔩';
