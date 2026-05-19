@@ -326,45 +326,52 @@
         <span class="filtro-label">Tipo</span>
         <select id="filtroTipo" onchange="aplicarFiltros()">
           <option value="">Todos</option>
-          <option value="Tornillo hexagonal">Tornillo hexagonal</option>
-          <option value="Tornillo allen">Tornillo allen</option>
-          <option value="Tornillo cruz">Tornillo cruz</option>
-          <option value="Tornillo plano">Tornillo plano</option>
+          <optgroup label="── Tornillos ──">
+          <option value="Tornillo Allen">Tornillo Allen</option>
+          <option value="Tornillo Allen Conico">Tornillo Allen Conico</option>
+          <option value="Tornillo Boton Allen">Tornillo Boton Allen</option>
+          <option value="Tornillo Cruz">Tornillo Cruz</option>
+          <option value="Tornillo Cruz Conico">Tornillo Cruz Conico</option>
+          <option value="Tornillo Boton Cruz">Tornillo Boton Cruz</option>
+          <option value="Tornillo Hexagonal">Tornillo Hexagonal</option>
+          <option value="Tornillo Plano">Tornillo Plano</option>
+          <option value="Tornillo Plano Conico">Tornillo Plano Conico</option>
+          </optgroup>
+          <optgroup label="── Tuercas ──">
           <option value="Tuerca">Tuerca</option>
-          <option value="Tuerca seguridad">Tuerca seguridad</option>
-          <option value="Tuerca mariposa">Tuerca mariposa</option>
+          <option value="Tuerca Seguridad">Tuerca Seguridad</option>
+          <option value="Tuerca Mariposa">Tuerca Mariposa</option>
+          </optgroup>
         </select>
       </div>
       <div class="filtro-wrap">
         <span class="filtro-label">Sistema</span>
-        <select id="filtroSistema" onchange="aplicarFiltros()">
+        <select id="filtroSistema" onchange="onSistemaChange()">
           <option value="">Todos</option>
-          <option value="Métrico">Métrico</option>
+          <option value="Metrico">Métrico</option>
           <option value="Pulgadas">Pulgadas</option>
+        </select>
+      </div>
+      <div class="filtro-wrap">
+        <span class="filtro-label">Medida</span>
+        <select id="filtroMedida" onchange="aplicarFiltros()">
+          <option value="">Todas</option>
         </select>
       </div>
       <div class="filtro-wrap">
         <span class="filtro-label">Material</span>
         <select id="filtroMaterial" onchange="aplicarFiltros()">
+          <option value="">Todos</option>
           <option value="Inoxidable">Inoxidable</option>
           <option value="Galvanizado">Galvanizado</option>
           <option value="Negro">Negro</option>
-        </select>
-      </div>
-      <div class="filtro-wrap">
-        <span class="filtro-label">Estado</span>
-        <select id="filtroEstado" onchange="aplicarFiltros()">
-          <option value="">Todos</option>
-          <option value="OK">OK</option>
-          <option value="BAJO">Bajo</option>
-          <option value="CRITICO">Crítico</option>
         </select>
       </div>
     </div>
 
     <div class="divider"><span>Búsqueda por texto</span></div>
     <div class="search-row">
-      <input type="text" id="searchTorn" placeholder="Ej: M6, 1/4, 20mm, Allen..." autocomplete="off" autocorrect="off" autocapitalize="off">
+      <input type="text" id="searchTorn" placeholder="Ej: M6x1.0, 1/4-20, 30mm, Allen..." autocomplete="off" autocorrect="off" autocapitalize="off">
       <button onclick="aplicarFiltros()">Buscar</button>
     </div>
 
@@ -475,28 +482,61 @@ function loadMateriales() {
 
   fetch(SCRIPT_URL + '?action=getMateriales')
     .then(r => r.json())
-    .then(data => { materiales = data.materiales || []; aplicarFiltros(); })
+    .then(data => {
+      materiales = data.materiales || [];
+      onSistemaChange(); // popula medidas y aplica filtros
+    })
     .catch(() => {
       document.getElementById('tablaBody').innerHTML = '<tr><td colspan="6" class="tabla-empty">⚠️ No se pudo cargar. Verifica conexión.</td></tr>';
       document.getElementById('tablaCount').textContent = '';
     });
 }
 
+// Cuando cambia el sistema, actualiza las medidas disponibles
+function onSistemaChange() {
+  const sistema = document.getElementById('filtroSistema').value;
+  const sel = document.getElementById('filtroMedida');
+  sel.innerHTML = '<option value="">Todas</option>';
+
+  // Filtrar medidas únicas del sistema seleccionado
+  const medidas = [...new Set(
+    materiales
+      .filter(m => !sistema || normalizar(m.sistema) === normalizar(sistema))
+      .map(m => m.medida)
+      .filter(Boolean)
+  )].sort((a, b) => {
+    // Ordenar: métricas numéricamente por el número M
+    const numA = parseFloat(a.replace(/[^0-9.]/g, '')) || 0;
+    const numB = parseFloat(b.replace(/[^0-9.]/g, '')) || 0;
+    return numA - numB || a.localeCompare(b);
+  });
+
+  medidas.forEach(m => {
+    const opt = document.createElement('option');
+    opt.value = m; opt.textContent = m;
+    sel.appendChild(opt);
+  });
+
+  aplicarFiltros();
+}
+
 function aplicarFiltros() {
   const tipo    = document.getElementById('filtroTipo').value;
   const sistema = document.getElementById('filtroSistema').value;
+  const medida  = document.getElementById('filtroMedida').value;
   const mat     = document.getElementById('filtroMaterial').value;
-  const estado  = document.getElementById('filtroEstado').value;
   const texto   = normalizar(document.getElementById('searchTorn').value.trim());
 
   let lista = materiales.filter(m => {
-    if (tipo   && normalizar(m.tipo)    !== normalizar(tipo))   return false;
+    if (tipo   && normalizar(m.tipo)     !== normalizar(tipo))    return false;
     if (sistema && normalizar(m.sistema) !== normalizar(sistema)) return false;
-    if (mat    && normalizar(m.material) !== normalizar(mat))   return false;
-    if (estado && estadoVal(m)           !== estado)             return false;
+    if (medida && m.medida               !== medida)              return false;
+    if (mat    && normalizar(m.material) !== normalizar(mat))     return false;
     if (texto) {
-      const h = normalizar((m.tipo||'')+' '+(m.medida||'')+' '+(m.largo||'')+' '+(m.material||'')+' '+(m.sistema||''));
-      if (!h.includes(texto)) return false;
+      const campos = [m.tipo, m.medida, m.largo, m.material, m.sistema];
+      const haystack = normalizar(campos.join(' '));
+      const palabras = texto.split(/\s+/);
+      if (!palabras.every(p => haystack.includes(p))) return false;
     }
     return true;
   });
@@ -660,7 +700,7 @@ function resetForm() {
   document.getElementById('mainFlow').style.display='block';
   document.getElementById('successScreen').classList.remove('active');
   ['nombre','cantidad','motivo','searchTorn'].forEach(id=>document.getElementById(id).value='');
-  ['filtroTipo','filtroSistema','filtroMaterial','filtroEstado'].forEach(id=>document.getElementById(id).value='');
+  ['filtroTipo','filtroSistema','filtroMedida','filtroMaterial'].forEach(id=>document.getElementById(id).value='');
   selMat=null; listaActiva=[]; materiales=[];
   setStep(1);
 }
