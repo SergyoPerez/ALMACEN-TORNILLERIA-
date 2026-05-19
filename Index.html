@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Almacén — Tornillos y Tuercas</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #22263a;
+    --border: #2e3350;
+    --accent: #f59e0b;
+    --accent2: #ef4444;
+    --green: #22c55e;
+    --red: #ef4444;
+    --amber: #f59e0b;
+    --text: #e8eaf0;
+    --text2: #8b90a8;
+    --text3: #4f5470;
+    --radius: 16px;
+    --radius-sm: 10px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 0 40px;
+  }
+
+  .header {
+    width: 100%;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 20px 16px;
+    position: sticky; top: 0; z-index: 20;
+  }
+  .header-top { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+  .logo {
+    width: 32px; height: 32px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+  .header h1 { font-size: 18px; font-weight: 600; }
+  .header p { font-size: 13px; color: var(--text2); margin-left: 42px; }
+
+  .container { width: 100%; max-width: 600px; padding: 20px 16px 0; }
+
+  /* Steps */
+  .steps { display: flex; align-items: center; margin-bottom: 24px; }
+  .step-dot {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--surface2); border: 1.5px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 500; color: var(--text3);
+    transition: all .3s; flex-shrink: 0;
+  }
+  .step-dot.active { background: var(--accent); border-color: var(--accent); color: #000; }
+  .step-dot.done { background: var(--green); border-color: var(--green); color: #fff; }
+  .step-line { flex: 1; height: 1.5px; background: var(--border); transition: background .3s; }
+  .step-line.done { background: var(--green); }
+
+  /* Cards */
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px; margin-bottom: 14px; display: none;
+  }
+  .card.active { display: block; animation: slideIn .25s ease; }
+  @keyframes slideIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+  .card-label { font-size: 11px; font-weight: 600; letter-spacing: .8px; color: var(--text3); text-transform: uppercase; margin-bottom: 10px; }
+  .card-title { font-size: 17px; font-weight: 600; margin-bottom: 16px; }
+
+  input, textarea, select {
+    width: 100%; background: var(--surface2); border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm); color: var(--text);
+    font-family: 'DM Sans', sans-serif; font-size: 16px;
+    padding: 14px 16px; outline: none; transition: border-color .2s;
+    -webkit-appearance: none; appearance: none;
+  }
+  input:focus, select:focus { border-color: var(--accent); }
+  input::placeholder { color: var(--text3); }
+
+  /* Filtros */
+  .filtros-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px;
+  }
+  .filtro-wrap { display: flex; flex-direction: column; gap: 6px; }
+  .filtro-label { font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: .6px; }
+  .filtro-wrap select { font-size: 14px; padding: 10px 14px; }
+
+  .search-row { display: flex; gap: 8px; margin-bottom: 14px; }
+  .search-row input { flex: 1; font-size: 14px; padding: 10px 14px; }
+  .search-row button {
+    background: var(--accent); border: none; border-radius: var(--radius-sm);
+    color: #000; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600;
+    padding: 0 16px; cursor: pointer; flex-shrink: 0;
+  }
+
+  /* Tabla */
+  .tabla-wrap { overflow-x: auto; border-radius: var(--radius-sm); border: 1px solid var(--border); margin-bottom: 14px; }
+  table { width: 100%; border-collapse: collapse; min-width: 500px; }
+  thead tr { background: var(--surface2); }
+  th {
+    padding: 10px 12px; text-align: left;
+    font-size: 11px; font-weight: 600; color: var(--text3);
+    text-transform: uppercase; letter-spacing: .6px;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap; cursor: pointer; user-select: none;
+  }
+  th:hover { color: var(--text); }
+  th .sort-icon { margin-left: 4px; opacity: .5; }
+  th.sorted .sort-icon { opacity: 1; color: var(--accent); }
+  td {
+    padding: 12px; font-size: 13px;
+    border-bottom: 1px solid var(--border);
+  }
+  tr:last-child td { border-bottom: none; }
+  tr.selected td { background: rgba(245,158,11,.08); }
+  tr.item-row { cursor: pointer; transition: background .1s; }
+  tr.item-row:hover td { background: var(--surface2); }
+  tr.item-row:active td { background: rgba(245,158,11,.1); }
+
+  .badge {
+    display: inline-block; padding: 3px 8px; border-radius: 6px;
+    font-size: 11px; font-weight: 600; font-family: 'DM Mono', monospace;
+    white-space: nowrap;
+  }
+  .badge-ok   { background: rgba(34,197,94,.12);  color: #4ade80; }
+  .badge-low  { background: rgba(245,158,11,.12); color: #fbbf24; }
+  .badge-crit { background: rgba(239,68,68,.12);  color: #f87171; }
+
+  .tipo-icon { font-size: 16px; margin-right: 6px; }
+
+  .tabla-empty { text-align: center; padding: 30px; color: var(--text2); font-size: 14px; }
+  .tabla-count { font-size: 12px; color: var(--text3); margin-bottom: 10px; }
+
+  /* Selected item card */
+  .sel-card {
+    background: rgba(245,158,11,.08); border: 1.5px solid rgba(245,158,11,.3);
+    border-radius: var(--radius-sm); padding: 14px 16px; margin-bottom: 14px;
+    display: none;
+  }
+  .sel-card.active { display: block; }
+  .sel-card-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .sel-card-detail { font-size: 12px; color: var(--text2); }
+
+  /* Quantity */
+  .qty-row { display: flex; gap: 10px; margin-bottom: 14px; }
+  .qty-row input { flex: 2; }
+
+  /* Confirm */
+  .confirm-card { background: var(--surface2); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 16px; }
+  .confirm-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 14px;
+  }
+  .confirm-row:last-child { border-bottom: none; }
+  .confirm-label { color: var(--text2); }
+  .confirm-value { font-weight: 600; text-align: right; max-width: 60%; }
+
+  .alert {
+    display: flex; gap: 10px; align-items: flex-start;
+    border-radius: var(--radius-sm); padding: 12px 14px;
+    font-size: 13px; margin-bottom: 14px;
+  }
+  .alert-warn  { background: rgba(245,158,11,.1); border: 1px solid rgba(245,158,11,.3); color: #fbbf24; }
+  .alert-danger{ background: rgba(239,68,68,.1);  border: 1px solid rgba(239,68,68,.3);  color: #f87171; }
+  .alert-info  { background: rgba(79,142,247,.1); border: 1px solid rgba(79,142,247,.3); color: #93c5fd; }
+
+  .btn {
+    width: 100%; padding: 16px; border: none; border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 600;
+    cursor: pointer; transition: all .15s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .btn:active { transform: scale(.97); }
+  .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #000; }
+  .btn:disabled { opacity: .4; pointer-events: none; }
+
+  .back-link {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 13px; color: var(--text2); cursor: pointer; margin-bottom: 16px; width: fit-content;
+  }
+
+  .error-msg { font-size: 13px; color: #f87171; text-align: center; margin-top: 8px; display: none; }
+
+  .spinner {
+    width: 20px; height: 20px; border-radius: 50%;
+    border: 2px solid rgba(0,0,0,.3); border-top-color: #000;
+    animation: spin .7s linear infinite; display: none;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .success-screen {
+    display: none; flex-direction: column; align-items: center;
+    padding: 40px 20px; text-align: center;
+  }
+  .success-screen.active { display: flex; animation: slideIn .3s ease; }
+  .success-icon {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: rgba(34,197,94,.15); border: 2px solid var(--green);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px; margin-bottom: 20px;
+    animation: popIn .4s cubic-bezier(.175,.885,.32,1.275);
+  }
+  @keyframes popIn { from { transform:scale(0); opacity:0; } to { transform:scale(1); opacity:1; } }
+  .success-title { font-size: 22px; font-weight: 600; margin-bottom: 8px; }
+  .success-sub { font-size: 14px; color: var(--text2); margin-bottom: 32px; line-height: 1.6; }
+  .success-detail {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 16px 20px;
+    width: 100%; text-align: left; margin-bottom: 24px;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div class="logo">🔩</div>
+    <h1>Tornillos y Tuercas</h1>
+  </div>
+  <p>Registro de retiro de material</p>
+</div>
+
+<div class="container" id="mainFlow">
+
+  <div class="steps" style="margin-top:20px">
+    <div class="step-dot active" id="dot1">1</div>
+    <div class="step-line" id="line1"></div>
+    <div class="step-dot" id="dot2">2</div>
+    <div class="step-line" id="line2"></div>
+    <div class="step-dot" id="dot3">3</div>
+    <div class="step-line" id="line3"></div>
+    <div class="step-dot" id="dot4">4</div>
+  </div>
+
+  <!-- PASO 1: Nombre -->
+  <div class="card active" id="step1">
+    <div class="card-label">Paso 1 de 4</div>
+    <div class="card-title">¿Quién eres?</div>
+    <input type="text" id="nombre" placeholder="Tu nombre completo" autocomplete="name" autocapitalize="words">
+    <div class="error-msg" id="err1">Escribe tu nombre para continuar.</div>
+    <br>
+    <button class="btn btn-primary" onclick="goStep2()">Continuar →</button>
+  </div>
+
+  <!-- PASO 2: Seleccionar tornillo/tuerca -->
+  <div class="card" id="step2">
+    <div class="back-link" onclick="goBack(1)">← Volver</div>
+    <div class="card-label">Paso 2 de 4</div>
+    <div class="card-title">¿Qué pieza retiras?</div>
+
+    <!-- Filtros -->
+    <div class="filtros-grid">
+      <div class="filtro-wrap">
+        <span class="filtro-label">Tipo</span>
+        <select id="filtroTipo" onchange="aplicarFiltros()">
+          <option value="">Todos</option>
+          <option value="Cruz">Cruz</option>
+          <option value="Allen">Allen</option>
+          <option value="Hexagonal">Hexagonal</option>
+          <option value="Tuerca">Tuerca</option>
+          <option value="Tuerca hex">Tuerca hex</option>
+          <option value="Tuerca allen">Tuerca allen</option>
+        </select>
+      </div>
+      <div class="filtro-wrap">
+        <span class="filtro-label">Sistema</span>
+        <select id="filtroSistema" onchange="aplicarFiltros()">
+          <option value="">Todos</option>
+          <option value="Métrico">Métrico</option>
+          <option value="Pulgadas">Pulgadas</option>
+        </select>
+      </div>
+      <div class="filtro-wrap">
+        <span class="filtro-label">Material</span>
+        <select id="filtroMaterial" onchange="aplicarFiltros()">
+          <option value="">Todos</option>
+          <option value="Acero">Acero</option>
+          <option value="Inoxidable">Inoxidable</option>
+          <option value="Galvanizado">Galvanizado</option>
+        </select>
+      </div>
+      <div class="filtro-wrap">
+        <span class="filtro-label">Estado</span>
+        <select id="filtroEstado" onchange="aplicarFiltros()">
+          <option value="">Todos</option>
+          <option value="OK">OK</option>
+          <option value="BAJO">Bajo</option>
+          <option value="CRITICO">Crítico</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="search-row">
+      <input type="text" id="searchTorn" placeholder="Buscar por medida, largo..." autocomplete="off" autocorrect="off" autocapitalize="off">
+      <button onclick="aplicarFiltros()">Buscar</button>
+    </div>
+
+    <div class="tabla-count" id="tablaCount">Cargando...</div>
+    <div class="tabla-wrap">
+      <table id="tablaMat">
+        <thead>
+          <tr>
+            <th onclick="sortTable('tipo')">Tipo <span class="sort-icon">↕</span></th>
+            <th onclick="sortTable('medida')">Medida <span class="sort-icon">↕</span></th>
+            <th onclick="sortTable('largo')">Largo <span class="sort-icon">↕</span></th>
+            <th onclick="sortTable('material')">Material <span class="sort-icon">↕</span></th>
+            <th onclick="sortTable('piezas')">Piezas <span class="sort-icon">↕</span></th>
+            <th onclick="sortTable('estado')">Estado <span class="sort-icon">↕</span></th>
+          </tr>
+        </thead>
+        <tbody id="tablaBody">
+          <tr><td colspan="6" class="tabla-empty">Cargando inventario...</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="error-msg" id="err2">Selecciona una pieza para continuar.</div>
+  </div>
+
+  <!-- PASO 3: Cantidad -->
+  <div class="card" id="step3">
+    <div class="back-link" onclick="goBack(2)">← Volver</div>
+    <div class="card-label">Paso 3 de 4</div>
+    <div class="card-title">¿Cuántas piezas retiras?</div>
+
+    <div class="sel-card active" id="selCard">
+      <div class="sel-card-title" id="selNombre">—</div>
+      <div class="sel-card-detail" id="selDetalle">—</div>
+    </div>
+
+    <div class="qty-row">
+      <input type="number" id="cantidad" placeholder="Cantidad de piezas" min="1" step="1" inputmode="numeric">
+    </div>
+    <div id="alertaStock" style="margin-bottom:14px;"></div>
+    <div class="error-msg" id="err3">Ingresa una cantidad válida.</div>
+
+    <input type="text" id="motivo" placeholder="Motivo / proyecto (opcional)" style="margin-bottom:14px;" autocapitalize="sentences">
+    <button class="btn btn-primary" onclick="goStep4()">Revisar →</button>
+  </div>
+
+  <!-- PASO 4: Confirmación -->
+  <div class="card" id="step4">
+    <div class="back-link" onclick="goBack(3)">← Corregir</div>
+    <div class="card-label">Paso 4 de 4</div>
+    <div class="card-title">Confirma el retiro</div>
+    <div class="confirm-card" id="confirmResumen"></div>
+    <div id="confirmAlerta"></div>
+    <button class="btn btn-primary" id="btnConfirmar" onclick="enviarRetiro()">
+      <span id="btnTxt">✓ Confirmar retiro</span>
+      <div class="spinner" id="btnSpinner"></div>
+    </button>
+    <div class="error-msg" id="errEnvio"></div>
+  </div>
+
+</div>
+
+<!-- SUCCESS -->
+<div class="success-screen container" id="successScreen">
+  <div class="success-icon">✓</div>
+  <div class="success-title">¡Retiro registrado!</div>
+  <div class="success-sub" id="successMsg">Stock actualizado en el inventario.</div>
+  <div class="success-detail" id="successDetail"></div>
+  <button class="btn btn-primary" onclick="resetForm()" style="max-width:340px;">Registrar otro retiro</button>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyMkzBslL2Dy8N0fYIkUGeo_QQ85FZi_1ksob7oGDjFgZe5Wo87QgoSvR2ZLi9vROAu/exec";
+// ═══════════════════════════════════════════════════════════
+
+let materiales = [];
+let listaActiva = [];
+let selMat = null;
+let sortCol = '';
+let sortDir = 1;
+
+function normalizar(str) {
+  return (str||'').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+}
+
+const tipoIcon = (tipo) => {
+  const t = normalizar(tipo);
+  if (t.includes('allen'))    return '⬡';
+  if (t.includes('cruz'))     return '✚';
+  if (t.includes('hex'))      return '⬢';
+  if (t.includes('tuerca'))   return '◉';
+  return '🔩';
+};
+
+const estadoBadge = (m) => {
+  if (m.piezas <= m.minimo * 0.5) return '<span class="badge badge-crit">Crítico</span>';
+  if (m.piezas <= m.minimo)       return '<span class="badge badge-low">Bajo</span>';
+  return '<span class="badge badge-ok">OK</span>';
+};
+
+const estadoVal = (m) => {
+  if (m.piezas <= m.minimo * 0.5) return 'CRITICO';
+  if (m.piezas <= m.minimo)       return 'BAJO';
+  return 'OK';
+};
+
+// Cargar materiales
+function loadMateriales() {
+  if (materiales.length > 0) { aplicarFiltros(); return; }
+  document.getElementById('tablaCount').textContent = 'Cargando...';
+  document.getElementById('tablaBody').innerHTML =
+    '<tr><td colspan="6" class="tabla-empty">Cargando inventario...</td></tr>';
+
+  fetch(SCRIPT_URL + '?action=getMateriales')
+    .then(r => r.json())
+    .then(data => {
+      materiales = data.materiales || [];
+      aplicarFiltros();
+    })
+    .catch(() => {
+      document.getElementById('tablaBody').innerHTML =
+        '<tr><td colspan="6" class="tabla-empty">⚠️ No se pudo cargar. Verifica conexión.</td></tr>';
+      document.getElementById('tablaCount').textContent = '';
+    });
+}
+
+function aplicarFiltros() {
+  const tipo     = document.getElementById('filtroTipo').value;
+  const sistema  = document.getElementById('filtroSistema').value;
+  const material = document.getElementById('filtroMaterial').value;
+  const estado   = document.getElementById('filtroEstado').value;
+  const texto    = normalizar(document.getElementById('searchTorn').value.trim());
+
+  let lista = materiales.filter(m => {
+    if (tipo     && normalizar(m.tipo)     !== normalizar(tipo))     return false;
+    if (sistema  && normalizar(m.sistema)  !== normalizar(sistema))  return false;
+    if (material && normalizar(m.material) !== normalizar(material)) return false;
+    if (estado   && estadoVal(m)           !== estado)               return false;
+    if (texto) {
+      const haystack = normalizar(
+        (m.tipo||'')+' '+(m.medida||'')+' '+(m.largo||'')+' '+(m.material||'')+' '+(m.sistema||'')
+      );
+      if (!haystack.includes(texto)) return false;
+    }
+    return true;
+  });
+
+  if (sortCol) {
+    lista = lista.slice().sort((a,b) => {
+      let va = a[sortCol] ?? ''; let vb = b[sortCol] ?? '';
+      if (typeof va === 'number') return (va - vb) * sortDir;
+      return String(va).localeCompare(String(vb)) * sortDir;
+    });
+  }
+
+  listaActiva = lista;
+  renderTabla(lista);
+}
+
+function renderTabla(list) {
+  const body  = document.getElementById('tablaBody');
+  const count = document.getElementById('tablaCount');
+  count.textContent = list.length + ' pieza' + (list.length !== 1 ? 's' : '') + ' encontrada' + (list.length !== 1 ? 's' : '');
+
+  if (!list.length) {
+    body.innerHTML = '<tr><td colspan="6" class="tabla-empty">Sin resultados con esos filtros</td></tr>';
+    return;
+  }
+
+  body.innerHTML = list.map((m, i) => `
+    <tr class="item-row" id="row${i}" onclick="selectMat(${i})">
+      <td><span class="tipo-icon">${tipoIcon(m.tipo)}</span>${m.tipo||'—'}</td>
+      <td><strong>${m.medida||'—'}</strong></td>
+      <td>${m.largo||'—'}</td>
+      <td>${m.material||'—'}</td>
+      <td style="font-family:'DM Mono',monospace;font-weight:500">${m.piezas}</td>
+      <td>${estadoBadge(m)}</td>
+    </tr>
+  `).join('');
+}
+
+function sortTable(col) {
+  if (sortCol === col) sortDir *= -1;
+  else { sortCol = col; sortDir = 1; }
+  document.querySelectorAll('th').forEach(th => th.classList.remove('sorted'));
+  event.currentTarget.classList.add('sorted');
+  aplicarFiltros();
+}
+
+function selectMat(idx) {
+  selMat = listaActiva[idx];
+  document.querySelectorAll('.item-row').forEach(r => r.classList.remove('selected'));
+  document.getElementById('row'+idx).classList.add('selected');
+  setTimeout(() => goStep3(), 200);
+}
+
+// Pasos
+function setStep(n) {
+  for (let i=1; i<=4; i++) {
+    document.getElementById('step'+i)?.classList.remove('active');
+    const dot = document.getElementById('dot'+i);
+    dot.classList.remove('active','done');
+    if (i < n) { dot.classList.add('done'); dot.textContent='✓'; }
+    else if (i === n) { dot.classList.add('active'); dot.textContent=i; }
+    else dot.textContent = i;
+    if (i < 4) document.getElementById('line'+i).classList.toggle('done', i < n);
+  }
+  document.getElementById('step'+n)?.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function goStep2() {
+  const nombre = document.getElementById('nombre').value.trim();
+  if (!nombre) { document.getElementById('err1').style.display='block'; return; }
+  document.getElementById('err1').style.display='none';
+  setStep(2);
+  loadMateriales();
+}
+
+function goStep3() {
+  if (!selMat) { document.getElementById('err2').style.display='block'; return; }
+  document.getElementById('err2').style.display='none';
+  setStep(3);
+  document.getElementById('selNombre').textContent =
+    `${selMat.tipo} ${selMat.medida} x ${selMat.largo} — ${selMat.material}`;
+  document.getElementById('selDetalle').textContent =
+    `Stock: ${selMat.piezas} piezas · Mínimo: ${selMat.minimo} piezas`;
+  document.getElementById('cantidad').addEventListener('input', updateAlerta);
+  updateAlerta();
+}
+
+function updateAlerta() {
+  const cant = parseInt(document.getElementById('cantidad').value)||0;
+  const alerta = document.getElementById('alertaStock');
+  if (!selMat || cant <= 0) { alerta.innerHTML=''; return; }
+  if (cant > selMat.piezas) {
+    alerta.innerHTML = `<div class="alert alert-danger">⛔ Stock insuficiente. Solo hay ${selMat.piezas} piezas.</div>`;
+    return;
+  }
+  const restante = selMat.piezas - cant;
+  if (restante <= selMat.minimo * 0.5)
+    alerta.innerHTML = `<div class="alert alert-danger">🔴 Quedarán <strong>${restante} piezas</strong> — nivel CRÍTICO.</div>`;
+  else if (restante <= selMat.minimo)
+    alerta.innerHTML = `<div class="alert alert-warn">⚠️ Quedarán <strong>${restante} piezas</strong> — bajo el mínimo.</div>`;
+  else
+    alerta.innerHTML = `<div class="alert alert-info">ℹ️ Quedarán <strong>${restante} piezas</strong> en inventario.</div>`;
+}
+
+function goStep4() {
+  const cant = parseInt(document.getElementById('cantidad').value);
+  if (!cant || cant <= 0) { document.getElementById('err3').style.display='block'; return; }
+  document.getElementById('err3').style.display='none';
+  if (cant > selMat.piezas) {
+    document.getElementById('err3').textContent='Stock insuficiente.';
+    document.getElementById('err3').style.display='block'; return;
+  }
+  setStep(4);
+  const restante = selMat.piezas - cant;
+  const motivo = document.getElementById('motivo').value.trim();
+  document.getElementById('confirmResumen').innerHTML = `
+    <div class="confirm-row"><span class="confirm-label">Persona</span><span class="confirm-value">${document.getElementById('nombre').value.trim()}</span></div>
+    <div class="confirm-row"><span class="confirm-label">Pieza</span><span class="confirm-value">${selMat.tipo} ${selMat.medida} x ${selMat.largo}</span></div>
+    <div class="confirm-row"><span class="confirm-label">Material</span><span class="confirm-value">${selMat.material}</span></div>
+    <div class="confirm-row"><span class="confirm-label">Cantidad</span><span class="confirm-value">${cant} piezas</span></div>
+    <div class="confirm-row"><span class="confirm-label">Motivo</span><span class="confirm-value">${motivo||'—'}</span></div>
+    <div class="confirm-row"><span class="confirm-label">Stock restante</span><span class="confirm-value">${restante} piezas</span></div>
+  `;
+  let alertaHtml = '';
+  if (restante <= selMat.minimo * 0.5)
+    alertaHtml = `<div class="alert alert-danger" style="margin-bottom:14px">🔴 Stock crítico. Avisa al encargado.</div>`;
+  else if (restante <= selMat.minimo)
+    alertaHtml = `<div class="alert alert-warn" style="margin-bottom:14px">⚠️ Stock bajo del mínimo. Considera reabastecer.</div>`;
+  document.getElementById('confirmAlerta').innerHTML = alertaHtml;
+}
+
+function goBack(n) { setStep(n); }
+
+async function enviarRetiro() {
+  const btn = document.getElementById('btnConfirmar');
+  const txt = document.getElementById('btnTxt');
+  const spinner = document.getElementById('btnSpinner');
+  const errEl = document.getElementById('errEnvio');
+  btn.disabled=true; txt.textContent='Enviando...'; spinner.style.display='block'; errEl.style.display='none';
+
+  const cant = parseInt(document.getElementById('cantidad').value);
+  const payload = {
+    action: 'registrarRetiro',
+    nombre: document.getElementById('nombre').value.trim(),
+    tipo: selMat.tipo, medida: selMat.medida, largo: selMat.largo,
+    material: selMat.material, sistema: selMat.sistema,
+    cantidad: cant, motivo: document.getElementById('motivo').value.trim(),
+    fila: selMat.fila
+  };
+
+  try {
+    const res = await fetch(SCRIPT_URL, { method:'POST', body: JSON.stringify(payload) });
+    const data = await res.json();
+    if (data.ok) showSuccess(payload, data);
+    else throw new Error(data.error||'Error desconocido');
+  } catch(e) {
+    errEl.textContent='Error: '+e.message; errEl.style.display='block';
+    btn.disabled=false; txt.textContent='✓ Confirmar retiro'; spinner.style.display='none';
+  }
+}
+
+function showSuccess(payload, data) {
+  document.getElementById('mainFlow').style.display='none';
+  document.getElementById('successScreen').classList.add('active');
+  document.getElementById('successMsg').textContent =
+    `${payload.tipo} ${payload.medida} actualizado. Quedan ${data.stockRestante} piezas.`;
+  document.getElementById('successDetail').innerHTML = `
+    <div class="confirm-row"><span class="confirm-label">Persona</span><span class="confirm-value">${payload.nombre}</span></div>
+    <div class="confirm-row"><span class="confirm-label">Pieza</span><span class="confirm-value">${payload.tipo} ${payload.medida} x ${payload.largo}</span></div>
+    <div class="confirm-row"><span class="confirm-label">Cantidad</span><span class="confirm-value">${payload.cantidad} piezas</span></div>
+    <div class="confirm-row"><span class="confirm-label">Stock restante</span><span class="confirm-value">${data.stockRestante} piezas</span></div>
+  `;
+}
+
+function resetForm() {
+  document.getElementById('mainFlow').style.display='block';
+  document.getElementById('successScreen').classList.remove('active');
+  document.getElementById('nombre').value='';
+  document.getElementById('cantidad').value='';
+  document.getElementById('motivo').value='';
+  document.getElementById('searchTorn').value='';
+  document.getElementById('filtroTipo').value='';
+  document.getElementById('filtroSistema').value='';
+  document.getElementById('filtroMaterial').value='';
+  document.getElementById('filtroEstado').value='';
+  selMat=null; listaActiva=[]; materiales=[];
+  setStep(1);
+}
+</script>
+</body>
+</html>
