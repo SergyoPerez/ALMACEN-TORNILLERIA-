@@ -3,22 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Almacén — Tornillos y Tuercas</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>Maquinados Express CNC — Tornillería</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0f1117;
-    --surface: #1a1d27;
-    --surface2: #22263a;
-    --border: #2e3350;
-    --accent: #f59e0b;
-    --accent2: #ef4444;
+    --bg: #0a0e17;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --border: #1e3a5f;
+    --accent: #1a6fc4;
+    --accent2: #0e4d8f;
+    --accent-light: #4da3f5;
     --green: #22c55e;
     --red: #ef4444;
     --amber: #f59e0b;
-    --text: #e8eaf0;
-    --text2: #8b90a8;
-    --text3: #4f5470;
+    --text: #e8edf5;
+    --text2: #8b9ab5;
+    --text3: #3d5070;
     --radius: 16px;
     --radius-sm: 10px;
   }
@@ -28,31 +29,68 @@
     background: var(--bg);
     color: var(--text);
     min-height: 100dvh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    display: flex; flex-direction: column; align-items: center;
     padding: 0 0 40px;
   }
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image:
+      radial-gradient(circle at 15% 15%, rgba(26,111,196,.1) 0%, transparent 45%),
+      radial-gradient(circle at 85% 85%, rgba(26,111,196,.07) 0%, transparent 45%),
+      url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%231a6fc4' fill-opacity='0.03'%3E%3Ccircle cx='40' cy='40' r='6'/%3E%3Ccircle cx='40' cy='40' r='15' stroke='%231a6fc4' stroke-opacity='0.03' stroke-width='1.5' fill='none'/%3E%3Crect x='37' y='20' width='6' height='8' rx='1'/%3E%3Crect x='37' y='52' width='6' height='8' rx='1'/%3E%3Crect x='20' y='37' width='8' height='6' rx='1'/%3E%3Crect x='52' y='37' width='8' height='6' rx='1'/%3E%3C/g%3E%3C/svg%3E");
+  }
 
+  /* Header */
   .header {
-    width: 100%;
-    background: var(--surface);
+    width: 100%; position: sticky; top: 0; z-index: 20;
+    background: rgba(10,14,23,.97);
     border-bottom: 1px solid var(--border);
-    padding: 20px 20px 16px;
-    position: sticky; top: 0; z-index: 20;
+    backdrop-filter: blur(12px);
   }
-  .header-top { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
-  .logo {
-    width: 32px; height: 32px;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    border-radius: 8px;
+  .header-brand {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 20px 10px;
+    border-bottom: 1px solid rgba(26,111,196,.15);
+  }
+  .brand-logo {
+    width: 48px; height: 48px; flex-shrink: 0;
+    background: #fff; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-size: 16px;
+    box-shadow: 0 0 0 2px rgba(26,111,196,.5), 0 4px 16px rgba(0,0,0,.5);
+    overflow: hidden; position: relative;
   }
-  .header h1 { font-size: 18px; font-weight: 600; }
-  .header p { font-size: 13px; color: var(--text2); margin-left: 42px; }
+  .brand-logo-inner {
+    width: 42px; height: 42px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  .logo-m {
+    font-size: 18px; font-weight: 900; color: #1a6fc4;
+    font-family: 'DM Sans', sans-serif; line-height: 1;
+    letter-spacing: -1px;
+  }
+  .logo-express {
+    font-size: 5.5px; font-weight: 700; color: #fff;
+    background: #1a6fc4; padding: 1px 4px; border-radius: 2px;
+    letter-spacing: .5px; margin-top: 1px;
+  }
+  .logo-cnc {
+    font-size: 6px; font-weight: 600; color: #1a6fc4;
+    letter-spacing: 1px; margin-top: 1px;
+  }
+  .brand-text { flex: 1; min-width: 0; }
+  .brand-name { font-size: 15px; font-weight: 700; color: #fff; line-height: 1.2; }
+  .brand-name span { color: var(--accent-light); }
+  .brand-sa { font-size: 11px; color: var(--text2); font-weight: 500; }
+  .brand-tagline { font-size: 10px; color: var(--text3); font-style: italic; margin-top: 2px; }
+  .header-sub {
+    padding: 8px 20px 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .header-sub p { font-size: 12px; color: var(--text2); }
 
-  .container { width: 100%; max-width: 600px; padding: 20px 16px 0; }
+  /* Container */
+  .container { width: 100%; max-width: 600px; padding: 20px 16px 0; position: relative; z-index: 1; }
 
   /* Steps */
   .steps { display: flex; align-items: center; margin-bottom: 24px; }
@@ -60,11 +98,11 @@
     width: 28px; height: 28px; border-radius: 50%;
     background: var(--surface2); border: 1.5px solid var(--border);
     display: flex; align-items: center; justify-content: center;
-    font-size: 12px; font-weight: 500; color: var(--text3);
+    font-size: 12px; font-weight: 600; color: var(--text3);
     transition: all .3s; flex-shrink: 0;
   }
-  .step-dot.active { background: var(--accent); border-color: var(--accent); color: #000; }
-  .step-dot.done { background: var(--green); border-color: var(--green); color: #fff; }
+  .step-dot.active { background: var(--accent); border-color: var(--accent-light); color: #fff; box-shadow: 0 0 14px rgba(26,111,196,.5); }
+  .step-dot.done   { background: var(--green);  border-color: var(--green); color: #fff; }
   .step-line { flex: 1; height: 1.5px; background: var(--border); transition: background .3s; }
   .step-line.done { background: var(--green); }
 
@@ -72,147 +110,157 @@
   .card {
     background: var(--surface); border: 1px solid var(--border);
     border-radius: var(--radius); padding: 20px; margin-bottom: 14px; display: none;
+    box-shadow: 0 4px 24px rgba(0,0,0,.35);
   }
   .card.active { display: block; animation: slideIn .25s ease; }
   @keyframes slideIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
-  .card-label { font-size: 11px; font-weight: 600; letter-spacing: .8px; color: var(--text3); text-transform: uppercase; margin-bottom: 10px; }
-  .card-title { font-size: 17px; font-weight: 600; margin-bottom: 16px; }
+  .card-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 1px;
+    color: var(--accent-light); text-transform: uppercase;
+    margin-bottom: 8px; display: flex; align-items: center; gap: 8px;
+  }
+  .card-label::before { content:''; display:block; width:20px; height:2px; background: linear-gradient(90deg, var(--accent), transparent); border-radius:2px; }
+  .card-title { font-size: 18px; font-weight: 700; margin-bottom: 18px; }
 
+  /* Inputs */
   input, textarea, select {
     width: 100%; background: var(--surface2); border: 1.5px solid var(--border);
     border-radius: var(--radius-sm); color: var(--text);
     font-family: 'DM Sans', sans-serif; font-size: 16px;
-    padding: 14px 16px; outline: none; transition: border-color .2s;
+    padding: 14px 16px; outline: none; transition: border-color .2s, box-shadow .2s;
     -webkit-appearance: none; appearance: none;
   }
-  input:focus, select:focus { border-color: var(--accent); }
+  input:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(26,111,196,.15); }
   input::placeholder { color: var(--text3); }
 
   /* Filtros */
-  .filtros-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px;
-  }
-  .filtro-wrap { display: flex; flex-direction: column; gap: 6px; }
-  .filtro-label { font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: .6px; }
+  .filtros-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .filtro-wrap { display: flex; flex-direction: column; gap: 5px; }
+  .filtro-label { font-size: 10px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: .7px; }
   .filtro-wrap select { font-size: 14px; padding: 10px 14px; }
 
   .search-row { display: flex; gap: 8px; margin-bottom: 14px; }
   .search-row input { flex: 1; font-size: 14px; padding: 10px 14px; }
   .search-row button {
     background: var(--accent); border: none; border-radius: var(--radius-sm);
-    color: #000; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600;
-    padding: 0 16px; cursor: pointer; flex-shrink: 0;
+    color: #fff; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600;
+    padding: 0 18px; cursor: pointer; flex-shrink: 0; transition: background .15s;
   }
+  .search-row button:active { background: var(--accent2); }
+
+  /* Divider */
+  .divider {
+    display: flex; align-items: center; gap: 10px; margin: 6px 0 14px;
+  }
+  .divider span { font-size: 10px; color: var(--text3); white-space: nowrap; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
+  .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
   /* Tabla */
-  .tabla-wrap { overflow-x: auto; border-radius: var(--radius-sm); border: 1px solid var(--border); margin-bottom: 14px; }
-  table { width: 100%; border-collapse: collapse; min-width: 500px; }
-  thead tr { background: var(--surface2); }
+  .tabla-wrap {
+    overflow-x: auto; border-radius: var(--radius-sm);
+    border: 1px solid var(--border); margin-bottom: 14px;
+    box-shadow: 0 2px 16px rgba(0,0,0,.25);
+  }
+  table { width: 100%; border-collapse: collapse; min-width: 480px; }
+  thead tr { background: linear-gradient(90deg, #0b1929, #112240); }
   th {
     padding: 10px 12px; text-align: left;
-    font-size: 11px; font-weight: 600; color: var(--text3);
-    text-transform: uppercase; letter-spacing: .6px;
+    font-size: 10px; font-weight: 700; color: var(--accent-light);
+    text-transform: uppercase; letter-spacing: .7px;
     border-bottom: 1px solid var(--border);
     white-space: nowrap; cursor: pointer; user-select: none;
   }
-  th:hover { color: var(--text); }
-  th .sort-icon { margin-left: 4px; opacity: .5; }
-  th.sorted .sort-icon { opacity: 1; color: var(--accent); }
-  td {
-    padding: 12px; font-size: 13px;
-    border-bottom: 1px solid var(--border);
-  }
+  th:hover { color: #fff; }
+  th .sort-icon { margin-left: 4px; opacity: .35; font-size: 11px; }
+  th.sorted .sort-icon { opacity: 1; color: var(--accent-light); }
+  td { padding: 11px 12px; font-size: 13px; border-bottom: 1px solid rgba(30,58,95,.4); }
   tr:last-child td { border-bottom: none; }
-  tr.selected td { background: rgba(245,158,11,.08); }
+  tr.selected td { background: rgba(26,111,196,.1); }
   tr.item-row { cursor: pointer; transition: background .1s; }
-  tr.item-row:hover td { background: var(--surface2); }
-  tr.item-row:active td { background: rgba(245,158,11,.1); }
+  tr.item-row:hover td { background: rgba(26,111,196,.06); }
+  tr.item-row:active td { background: rgba(26,111,196,.14); }
 
   .badge {
     display: inline-block; padding: 3px 8px; border-radius: 6px;
-    font-size: 11px; font-weight: 600; font-family: 'DM Mono', monospace;
-    white-space: nowrap;
+    font-size: 11px; font-weight: 700; font-family: 'DM Mono', monospace; white-space: nowrap;
   }
   .badge-ok   { background: rgba(34,197,94,.12);  color: #4ade80; }
   .badge-low  { background: rgba(245,158,11,.12); color: #fbbf24; }
   .badge-crit { background: rgba(239,68,68,.12);  color: #f87171; }
 
-  .tipo-icon { font-size: 16px; margin-right: 6px; }
-
+  .tipo-icon { margin-right: 5px; font-size: 14px; }
   .tabla-empty { text-align: center; padding: 30px; color: var(--text2); font-size: 14px; }
-  .tabla-count { font-size: 12px; color: var(--text3); margin-bottom: 10px; }
+  .tabla-count { font-size: 12px; color: var(--text3); margin-bottom: 8px; font-weight: 500; }
 
-  /* Selected item card */
+  /* Selected card */
   .sel-card {
-    background: rgba(245,158,11,.08); border: 1.5px solid rgba(245,158,11,.3);
-    border-radius: var(--radius-sm); padding: 14px 16px; margin-bottom: 14px;
-    display: none;
+    background: rgba(26,111,196,.07); border: 1.5px solid rgba(26,111,196,.3);
+    border-radius: var(--radius-sm); padding: 14px 16px; margin-bottom: 14px; display: none;
   }
   .sel-card.active { display: block; }
   .sel-card-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
   .sel-card-detail { font-size: 12px; color: var(--text2); }
 
-  /* Quantity */
   .qty-row { display: flex; gap: 10px; margin-bottom: 14px; }
-  .qty-row input { flex: 2; }
 
   /* Confirm */
-  .confirm-card { background: var(--surface2); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 16px; }
-  .confirm-row {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 14px;
-  }
+  .confirm-card { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 16px; }
+  .confirm-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(30,58,95,.5); font-size: 14px; }
   .confirm-row:last-child { border-bottom: none; }
   .confirm-label { color: var(--text2); }
   .confirm-value { font-weight: 600; text-align: right; max-width: 60%; }
 
-  .alert {
-    display: flex; gap: 10px; align-items: flex-start;
-    border-radius: var(--radius-sm); padding: 12px 14px;
-    font-size: 13px; margin-bottom: 14px;
-  }
-  .alert-warn  { background: rgba(245,158,11,.1); border: 1px solid rgba(245,158,11,.3); color: #fbbf24; }
-  .alert-danger{ background: rgba(239,68,68,.1);  border: 1px solid rgba(239,68,68,.3);  color: #f87171; }
-  .alert-info  { background: rgba(79,142,247,.1); border: 1px solid rgba(79,142,247,.3); color: #93c5fd; }
+  /* Alerts */
+  .alert { display: flex; gap: 10px; align-items: flex-start; border-radius: var(--radius-sm); padding: 12px 14px; font-size: 13px; margin-bottom: 14px; }
+  .alert-warn   { background: rgba(245,158,11,.08); border: 1px solid rgba(245,158,11,.3); color: #fbbf24; }
+  .alert-danger { background: rgba(239,68,68,.08);  border: 1px solid rgba(239,68,68,.3);  color: #f87171; }
+  .alert-info   { background: rgba(26,111,196,.08); border: 1px solid rgba(26,111,196,.3); color: #93c5fd; }
 
+  /* Buttons */
   .btn {
     width: 100%; padding: 16px; border: none; border-radius: var(--radius-sm);
-    font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 600;
+    font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 700;
     cursor: pointer; transition: all .15s;
     display: flex; align-items: center; justify-content: center; gap: 8px;
   }
   .btn:active { transform: scale(.97); }
-  .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #000; }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+    color: #fff; box-shadow: 0 4px 18px rgba(26,111,196,.45);
+  }
   .btn:disabled { opacity: .4; pointer-events: none; }
 
   .back-link {
     display: flex; align-items: center; gap: 6px;
     font-size: 13px; color: var(--text2); cursor: pointer; margin-bottom: 16px; width: fit-content;
   }
+  .back-link:hover { color: var(--accent-light); }
 
   .error-msg { font-size: 13px; color: #f87171; text-align: center; margin-top: 8px; display: none; }
 
   .spinner {
     width: 20px; height: 20px; border-radius: 50%;
-    border: 2px solid rgba(0,0,0,.3); border-top-color: #000;
+    border: 2px solid rgba(255,255,255,.3); border-top-color: #fff;
     animation: spin .7s linear infinite; display: none;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
+  /* Success */
   .success-screen {
     display: none; flex-direction: column; align-items: center;
-    padding: 40px 20px; text-align: center;
+    padding: 40px 20px; text-align: center; position: relative; z-index: 1;
   }
   .success-screen.active { display: flex; animation: slideIn .3s ease; }
   .success-icon {
-    width: 72px; height: 72px; border-radius: 50%;
-    background: rgba(34,197,94,.15); border: 2px solid var(--green);
+    width: 80px; height: 80px; border-radius: 50%;
+    background: rgba(34,197,94,.12); border: 2px solid var(--green);
     display: flex; align-items: center; justify-content: center;
-    font-size: 32px; margin-bottom: 20px;
+    font-size: 36px; margin-bottom: 20px;
     animation: popIn .4s cubic-bezier(.175,.885,.32,1.275);
+    box-shadow: 0 0 30px rgba(34,197,94,.2);
   }
-  @keyframes popIn { from { transform:scale(0); opacity:0; } to { transform:scale(1); opacity:1; } }
-  .success-title { font-size: 22px; font-weight: 600; margin-bottom: 8px; }
+  @keyframes popIn { from{transform:scale(0);opacity:0;} to{transform:scale(1);opacity:1;} }
+  .success-title { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
   .success-sub { font-size: 14px; color: var(--text2); margin-bottom: 32px; line-height: 1.6; }
   .success-detail {
     background: var(--surface); border: 1px solid var(--border);
@@ -224,11 +272,24 @@
 <body>
 
 <div class="header">
-  <div class="header-top">
-    <div class="logo">🔩</div>
-    <h1>Tornillos y Tuercas</h1>
+  <div class="header-brand">
+    <div class="brand-logo">
+      <div class="brand-logo-inner">
+        <div class="logo-m">M</div>
+        <div class="logo-express">EXPRESS</div>
+        <div class="logo-cnc">CNC</div>
+      </div>
+    </div>
+    <div class="brand-text">
+      <div class="brand-name">Maquinados <span>Express CNC</span></div>
+      <div class="brand-sa">S.A. de C.V.</div>
+      <div class="brand-tagline">"Tan pronto como sea posible"</div>
+    </div>
+    <div style="font-size:24px;opacity:.6" aria-hidden="true">🔩</div>
   </div>
-  <p>Registro de retiro de material</p>
+  <div class="header-sub">
+    <p>⚙️ &nbsp;Control de tornillería y tuercas</p>
+  </div>
 </div>
 
 <div class="container" id="mainFlow">
@@ -243,23 +304,23 @@
     <div class="step-dot" id="dot4">4</div>
   </div>
 
-  <!-- PASO 1: Nombre -->
+  <!-- PASO 1 -->
   <div class="card active" id="step1">
     <div class="card-label">Paso 1 de 4</div>
-    <div class="card-title">¿Quién eres?</div>
+    <div class="card-title">¿Quién realiza el retiro?</div>
     <input type="text" id="nombre" placeholder="Tu nombre completo" autocomplete="name" autocapitalize="words">
     <div class="error-msg" id="err1">Escribe tu nombre para continuar.</div>
     <br>
     <button class="btn btn-primary" onclick="goStep2()">Continuar →</button>
   </div>
 
-  <!-- PASO 2: Seleccionar tornillo/tuerca -->
+  <!-- PASO 2 -->
   <div class="card" id="step2">
     <div class="back-link" onclick="goBack(1)">← Volver</div>
     <div class="card-label">Paso 2 de 4</div>
     <div class="card-title">¿Qué pieza retiras?</div>
 
-    <!-- Filtros -->
+    <div class="divider"><span>Filtros rápidos</span></div>
     <div class="filtros-grid">
       <div class="filtro-wrap">
         <span class="filtro-label">Tipo</span>
@@ -301,14 +362,15 @@
       </div>
     </div>
 
+    <div class="divider"><span>Búsqueda por texto</span></div>
     <div class="search-row">
-      <input type="text" id="searchTorn" placeholder="Buscar por medida, largo..." autocomplete="off" autocorrect="off" autocapitalize="off">
+      <input type="text" id="searchTorn" placeholder="Ej: M6, 1/4, 20mm, Allen..." autocomplete="off" autocorrect="off" autocapitalize="off">
       <button onclick="aplicarFiltros()">Buscar</button>
     </div>
 
     <div class="tabla-count" id="tablaCount">Cargando...</div>
     <div class="tabla-wrap">
-      <table id="tablaMat">
+      <table>
         <thead>
           <tr>
             <th onclick="sortTable('tipo')">Tipo <span class="sort-icon">↕</span></th>
@@ -320,35 +382,32 @@
           </tr>
         </thead>
         <tbody id="tablaBody">
-          <tr><td colspan="6" class="tabla-empty">Cargando inventario...</td></tr>
+          <tr><td colspan="6" class="tabla-empty">⚙️ Cargando inventario...</td></tr>
         </tbody>
       </table>
     </div>
     <div class="error-msg" id="err2">Selecciona una pieza para continuar.</div>
   </div>
 
-  <!-- PASO 3: Cantidad -->
+  <!-- PASO 3 -->
   <div class="card" id="step3">
     <div class="back-link" onclick="goBack(2)">← Volver</div>
     <div class="card-label">Paso 3 de 4</div>
     <div class="card-title">¿Cuántas piezas retiras?</div>
-
     <div class="sel-card active" id="selCard">
       <div class="sel-card-title" id="selNombre">—</div>
       <div class="sel-card-detail" id="selDetalle">—</div>
     </div>
-
     <div class="qty-row">
       <input type="number" id="cantidad" placeholder="Cantidad de piezas" min="1" step="1" inputmode="numeric">
     </div>
-    <div id="alertaStock" style="margin-bottom:14px;"></div>
+    <div id="alertaStock"></div>
     <div class="error-msg" id="err3">Ingresa una cantidad válida.</div>
-
     <input type="text" id="motivo" placeholder="Motivo / proyecto (opcional)" style="margin-bottom:14px;" autocapitalize="sentences">
     <button class="btn btn-primary" onclick="goStep4()">Revisar →</button>
   </div>
 
-  <!-- PASO 4: Confirmación -->
+  <!-- PASO 4 -->
   <div class="card" id="step4">
     <div class="back-link" onclick="goBack(3)">← Corregir</div>
     <div class="card-label">Paso 4 de 4</div>
@@ -368,7 +427,7 @@
 <div class="success-screen container" id="successScreen">
   <div class="success-icon">✓</div>
   <div class="success-title">¡Retiro registrado!</div>
-  <div class="success-sub" id="successMsg">Stock actualizado en el inventario.</div>
+  <div class="success-sub" id="successMsg">Stock actualizado correctamente.</div>
   <div class="success-detail" id="successDetail"></div>
   <button class="btn btn-primary" onclick="resetForm()" style="max-width:340px;">Registrar otro retiro</button>
 </div>
@@ -388,73 +447,65 @@ function normalizar(str) {
   return (str||'').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
 }
 
-const tipoIcon = (tipo) => {
-  const t = normalizar(tipo);
-  if (t.includes('allen'))    return '⬡';
-  if (t.includes('cruz'))     return '✚';
-  if (t.includes('hex'))      return '⬢';
-  if (t.includes('tuerca'))   return '◉';
+const tipoIcon = t => {
+  const n = normalizar(t);
+  if (n.includes('allen'))  return '⬡';
+  if (n.includes('cruz'))   return '✚';
+  if (n.includes('hex'))    return '⬢';
+  if (n.includes('tuerca')) return '◉';
   return '🔩';
 };
 
-const estadoBadge = (m) => {
-  if (m.piezas <= m.minimo * 0.5) return '<span class="badge badge-crit">Crítico</span>';
-  if (m.piezas <= m.minimo)       return '<span class="badge badge-low">Bajo</span>';
+const estadoBadge = m => {
+  if (m.piezas <= m.minimo*.5) return '<span class="badge badge-crit">Crítico</span>';
+  if (m.piezas <= m.minimo)    return '<span class="badge badge-low">Bajo</span>';
   return '<span class="badge badge-ok">OK</span>';
 };
 
-const estadoVal = (m) => {
-  if (m.piezas <= m.minimo * 0.5) return 'CRITICO';
-  if (m.piezas <= m.minimo)       return 'BAJO';
+const estadoVal = m => {
+  if (m.piezas <= m.minimo*.5) return 'CRITICO';
+  if (m.piezas <= m.minimo)    return 'BAJO';
   return 'OK';
 };
 
-// Cargar materiales
 function loadMateriales() {
   if (materiales.length > 0) { aplicarFiltros(); return; }
   document.getElementById('tablaCount').textContent = 'Cargando...';
-  document.getElementById('tablaBody').innerHTML =
-    '<tr><td colspan="6" class="tabla-empty">Cargando inventario...</td></tr>';
+  document.getElementById('tablaBody').innerHTML = '<tr><td colspan="6" class="tabla-empty">⚙️ Cargando inventario...</td></tr>';
 
   fetch(SCRIPT_URL + '?action=getMateriales')
     .then(r => r.json())
-    .then(data => {
-      materiales = data.materiales || [];
-      aplicarFiltros();
-    })
+    .then(data => { materiales = data.materiales || []; aplicarFiltros(); })
     .catch(() => {
-      document.getElementById('tablaBody').innerHTML =
-        '<tr><td colspan="6" class="tabla-empty">⚠️ No se pudo cargar. Verifica conexión.</td></tr>';
+      document.getElementById('tablaBody').innerHTML = '<tr><td colspan="6" class="tabla-empty">⚠️ No se pudo cargar. Verifica conexión.</td></tr>';
       document.getElementById('tablaCount').textContent = '';
     });
 }
 
 function aplicarFiltros() {
-  const tipo     = document.getElementById('filtroTipo').value;
-  const sistema  = document.getElementById('filtroSistema').value;
-  const material = document.getElementById('filtroMaterial').value;
-  const estado   = document.getElementById('filtroEstado').value;
-  const texto    = normalizar(document.getElementById('searchTorn').value.trim());
+  const tipo    = document.getElementById('filtroTipo').value;
+  const sistema = document.getElementById('filtroSistema').value;
+  const mat     = document.getElementById('filtroMaterial').value;
+  const estado  = document.getElementById('filtroEstado').value;
+  const texto   = normalizar(document.getElementById('searchTorn').value.trim());
 
   let lista = materiales.filter(m => {
-    if (tipo     && normalizar(m.tipo)     !== normalizar(tipo))     return false;
-    if (sistema  && normalizar(m.sistema)  !== normalizar(sistema))  return false;
-    if (material && normalizar(m.material) !== normalizar(material)) return false;
-    if (estado   && estadoVal(m)           !== estado)               return false;
+    if (tipo   && normalizar(m.tipo)    !== normalizar(tipo))   return false;
+    if (sistema && normalizar(m.sistema) !== normalizar(sistema)) return false;
+    if (mat    && normalizar(m.material) !== normalizar(mat))   return false;
+    if (estado && estadoVal(m)           !== estado)             return false;
     if (texto) {
-      const haystack = normalizar(
-        (m.tipo||'')+' '+(m.medida||'')+' '+(m.largo||'')+' '+(m.material||'')+' '+(m.sistema||'')
-      );
-      if (!haystack.includes(texto)) return false;
+      const h = normalizar((m.tipo||'')+' '+(m.medida||'')+' '+(m.largo||'')+' '+(m.material||'')+' '+(m.sistema||''));
+      if (!h.includes(texto)) return false;
     }
     return true;
   });
 
   if (sortCol) {
     lista = lista.slice().sort((a,b) => {
-      let va = a[sortCol] ?? ''; let vb = b[sortCol] ?? '';
-      if (typeof va === 'number') return (va - vb) * sortDir;
-      return String(va).localeCompare(String(vb)) * sortDir;
+      let va=a[sortCol]??'', vb=b[sortCol]??'';
+      if (typeof va==='number') return (va-vb)*sortDir;
+      return String(va).localeCompare(String(vb))*sortDir;
     });
   }
 
@@ -465,157 +516,141 @@ function aplicarFiltros() {
 function renderTabla(list) {
   const body  = document.getElementById('tablaBody');
   const count = document.getElementById('tablaCount');
-  count.textContent = list.length + ' pieza' + (list.length !== 1 ? 's' : '') + ' encontrada' + (list.length !== 1 ? 's' : '');
+  count.textContent = list.length + ' pieza' + (list.length!==1?'s':'') + ' encontrada' + (list.length!==1?'s':'');
 
   if (!list.length) {
     body.innerHTML = '<tr><td colspan="6" class="tabla-empty">Sin resultados con esos filtros</td></tr>';
     return;
   }
 
-  body.innerHTML = list.map((m, i) => `
+  body.innerHTML = list.map((m,i) => `
     <tr class="item-row" id="row${i}" onclick="selectMat(${i})">
       <td><span class="tipo-icon">${tipoIcon(m.tipo)}</span>${m.tipo||'—'}</td>
       <td><strong>${m.medida||'—'}</strong></td>
       <td>${m.largo||'—'}</td>
       <td>${m.material||'—'}</td>
-      <td style="font-family:'DM Mono',monospace;font-weight:500">${m.piezas}</td>
+      <td style="font-family:'DM Mono',monospace;font-weight:600">${m.piezas}</td>
       <td>${estadoBadge(m)}</td>
     </tr>
   `).join('');
 }
 
 function sortTable(col) {
-  if (sortCol === col) sortDir *= -1;
-  else { sortCol = col; sortDir = 1; }
-  document.querySelectorAll('th').forEach(th => th.classList.remove('sorted'));
+  if (sortCol===col) sortDir*=-1; else { sortCol=col; sortDir=1; }
+  document.querySelectorAll('th').forEach(th=>th.classList.remove('sorted'));
   event.currentTarget.classList.add('sorted');
   aplicarFiltros();
 }
 
 function selectMat(idx) {
   selMat = listaActiva[idx];
-  document.querySelectorAll('.item-row').forEach(r => r.classList.remove('selected'));
+  document.querySelectorAll('.item-row').forEach(r=>r.classList.remove('selected'));
   document.getElementById('row'+idx).classList.add('selected');
-  setTimeout(() => goStep3(), 200);
+  setTimeout(()=>goStep3(), 200);
 }
 
-// Pasos
 function setStep(n) {
-  for (let i=1; i<=4; i++) {
+  for (let i=1;i<=4;i++) {
     document.getElementById('step'+i)?.classList.remove('active');
-    const dot = document.getElementById('dot'+i);
+    const dot=document.getElementById('dot'+i);
     dot.classList.remove('active','done');
-    if (i < n) { dot.classList.add('done'); dot.textContent='✓'; }
-    else if (i === n) { dot.classList.add('active'); dot.textContent=i; }
-    else dot.textContent = i;
-    if (i < 4) document.getElementById('line'+i).classList.toggle('done', i < n);
+    if(i<n){dot.classList.add('done');dot.textContent='✓';}
+    else if(i===n){dot.classList.add('active');dot.textContent=i;}
+    else dot.textContent=i;
+    if(i<4) document.getElementById('line'+i).classList.toggle('done',i<n);
   }
   document.getElementById('step'+n)?.classList.add('active');
   window.scrollTo(0,0);
 }
 
 function goStep2() {
-  const nombre = document.getElementById('nombre').value.trim();
-  if (!nombre) { document.getElementById('err1').style.display='block'; return; }
+  const n=document.getElementById('nombre').value.trim();
+  if(!n){document.getElementById('err1').style.display='block';return;}
   document.getElementById('err1').style.display='none';
-  setStep(2);
-  loadMateriales();
+  setStep(2); loadMateriales();
 }
 
 function goStep3() {
-  if (!selMat) { document.getElementById('err2').style.display='block'; return; }
+  if(!selMat){document.getElementById('err2').style.display='block';return;}
   document.getElementById('err2').style.display='none';
   setStep(3);
-  document.getElementById('selNombre').textContent =
-    `${selMat.tipo} ${selMat.medida} x ${selMat.largo} — ${selMat.material}`;
-  document.getElementById('selDetalle').textContent =
-    `Stock: ${selMat.piezas} piezas · Mínimo: ${selMat.minimo} piezas`;
+  document.getElementById('selNombre').textContent=`${selMat.tipo} ${selMat.medida} × ${selMat.largo} — ${selMat.material}`;
+  document.getElementById('selDetalle').textContent=`Stock: ${selMat.piezas} piezas · Mínimo: ${selMat.minimo} piezas · ${selMat.sistema||''}`;
   document.getElementById('cantidad').addEventListener('input', updateAlerta);
   updateAlerta();
 }
 
 function updateAlerta() {
-  const cant = parseInt(document.getElementById('cantidad').value)||0;
-  const alerta = document.getElementById('alertaStock');
-  if (!selMat || cant <= 0) { alerta.innerHTML=''; return; }
-  if (cant > selMat.piezas) {
-    alerta.innerHTML = `<div class="alert alert-danger">⛔ Stock insuficiente. Solo hay ${selMat.piezas} piezas.</div>`;
-    return;
-  }
-  const restante = selMat.piezas - cant;
-  if (restante <= selMat.minimo * 0.5)
-    alerta.innerHTML = `<div class="alert alert-danger">🔴 Quedarán <strong>${restante} piezas</strong> — nivel CRÍTICO.</div>`;
-  else if (restante <= selMat.minimo)
-    alerta.innerHTML = `<div class="alert alert-warn">⚠️ Quedarán <strong>${restante} piezas</strong> — bajo el mínimo.</div>`;
-  else
-    alerta.innerHTML = `<div class="alert alert-info">ℹ️ Quedarán <strong>${restante} piezas</strong> en inventario.</div>`;
+  const cant=parseInt(document.getElementById('cantidad').value)||0;
+  const al=document.getElementById('alertaStock');
+  if(!selMat||cant<=0){al.innerHTML='';return;}
+  if(cant>selMat.piezas){al.innerHTML=`<div class="alert alert-danger">⛔ Stock insuficiente. Solo hay ${selMat.piezas} piezas.</div>`;return;}
+  const r=selMat.piezas-cant;
+  if(r<=selMat.minimo*.5) al.innerHTML=`<div class="alert alert-danger">🔴 Quedarán <strong>${r} piezas</strong> — nivel CRÍTICO.</div>`;
+  else if(r<=selMat.minimo) al.innerHTML=`<div class="alert alert-warn">⚠️ Quedarán <strong>${r} piezas</strong> — bajo el mínimo.</div>`;
+  else al.innerHTML=`<div class="alert alert-info">ℹ️ Quedarán <strong>${r} piezas</strong> en inventario.</div>`;
 }
 
 function goStep4() {
-  const cant = parseInt(document.getElementById('cantidad').value);
-  if (!cant || cant <= 0) { document.getElementById('err3').style.display='block'; return; }
-  document.getElementById('err3').style.display='none';
-  if (cant > selMat.piezas) {
-    document.getElementById('err3').textContent='Stock insuficiente.';
-    document.getElementById('err3').style.display='block'; return;
-  }
+  const cant=parseInt(document.getElementById('cantidad').value);
+  const e=document.getElementById('err3');
+  if(!cant||cant<=0){e.style.display='block';return;}
+  e.style.display='none';
+  if(cant>selMat.piezas){e.textContent='Stock insuficiente.';e.style.display='block';return;}
   setStep(4);
-  const restante = selMat.piezas - cant;
-  const motivo = document.getElementById('motivo').value.trim();
-  document.getElementById('confirmResumen').innerHTML = `
+  const r=selMat.piezas-cant;
+  const mot=document.getElementById('motivo').value.trim();
+  document.getElementById('confirmResumen').innerHTML=`
     <div class="confirm-row"><span class="confirm-label">Persona</span><span class="confirm-value">${document.getElementById('nombre').value.trim()}</span></div>
-    <div class="confirm-row"><span class="confirm-label">Pieza</span><span class="confirm-value">${selMat.tipo} ${selMat.medida} x ${selMat.largo}</span></div>
-    <div class="confirm-row"><span class="confirm-label">Material</span><span class="confirm-value">${selMat.material}</span></div>
+    <div class="confirm-row"><span class="confirm-label">Pieza</span><span class="confirm-value">${selMat.tipo} ${selMat.medida} × ${selMat.largo}</span></div>
+    <div class="confirm-row"><span class="confirm-label">Material</span><span class="confirm-value">${selMat.material} · ${selMat.sistema||''}</span></div>
     <div class="confirm-row"><span class="confirm-label">Cantidad</span><span class="confirm-value">${cant} piezas</span></div>
-    <div class="confirm-row"><span class="confirm-label">Motivo</span><span class="confirm-value">${motivo||'—'}</span></div>
-    <div class="confirm-row"><span class="confirm-label">Stock restante</span><span class="confirm-value">${restante} piezas</span></div>
+    <div class="confirm-row"><span class="confirm-label">Motivo</span><span class="confirm-value">${mot||'—'}</span></div>
+    <div class="confirm-row"><span class="confirm-label">Stock restante</span><span class="confirm-value">${r} piezas</span></div>
   `;
-  let alertaHtml = '';
-  if (restante <= selMat.minimo * 0.5)
-    alertaHtml = `<div class="alert alert-danger" style="margin-bottom:14px">🔴 Stock crítico. Avisa al encargado.</div>`;
-  else if (restante <= selMat.minimo)
-    alertaHtml = `<div class="alert alert-warn" style="margin-bottom:14px">⚠️ Stock bajo del mínimo. Considera reabastecer.</div>`;
-  document.getElementById('confirmAlerta').innerHTML = alertaHtml;
+  let ah='';
+  if(r<=selMat.minimo*.5) ah=`<div class="alert alert-danger" style="margin-bottom:14px">🔴 Stock crítico. Avisa al encargado.</div>`;
+  else if(r<=selMat.minimo) ah=`<div class="alert alert-warn" style="margin-bottom:14px">⚠️ Stock bajo. Considera reabastecer.</div>`;
+  document.getElementById('confirmAlerta').innerHTML=ah;
 }
 
-function goBack(n) { setStep(n); }
+function goBack(n){setStep(n);}
 
 async function enviarRetiro() {
-  const btn = document.getElementById('btnConfirmar');
-  const txt = document.getElementById('btnTxt');
-  const spinner = document.getElementById('btnSpinner');
-  const errEl = document.getElementById('errEnvio');
-  btn.disabled=true; txt.textContent='Enviando...'; spinner.style.display='block'; errEl.style.display='none';
+  const btn=document.getElementById('btnConfirmar');
+  const txt=document.getElementById('btnTxt');
+  const sp=document.getElementById('btnSpinner');
+  const er=document.getElementById('errEnvio');
+  btn.disabled=true;txt.textContent='Enviando...';sp.style.display='block';er.style.display='none';
 
-  const cant = parseInt(document.getElementById('cantidad').value);
-  const payload = {
-    action: 'registrarRetiro',
-    nombre: document.getElementById('nombre').value.trim(),
-    tipo: selMat.tipo, medida: selMat.medida, largo: selMat.largo,
-    material: selMat.material, sistema: selMat.sistema,
-    cantidad: cant, motivo: document.getElementById('motivo').value.trim(),
-    fila: selMat.fila
+  const payload={
+    action:'registrarRetiro',
+    nombre:document.getElementById('nombre').value.trim(),
+    tipo:selMat.tipo, medida:selMat.medida, largo:selMat.largo,
+    material:selMat.material, sistema:selMat.sistema,
+    cantidad:parseInt(document.getElementById('cantidad').value),
+    motivo:document.getElementById('motivo').value.trim(),
+    fila:selMat.fila
   };
 
   try {
-    const res = await fetch(SCRIPT_URL, { method:'POST', body: JSON.stringify(payload) });
-    const data = await res.json();
-    if (data.ok) showSuccess(payload, data);
+    const res=await fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify(payload)});
+    const data=await res.json();
+    if(data.ok) showSuccess(payload,data);
     else throw new Error(data.error||'Error desconocido');
   } catch(e) {
-    errEl.textContent='Error: '+e.message; errEl.style.display='block';
-    btn.disabled=false; txt.textContent='✓ Confirmar retiro'; spinner.style.display='none';
+    er.textContent='Error: '+e.message; er.style.display='block';
+    btn.disabled=false; txt.textContent='✓ Confirmar retiro'; sp.style.display='none';
   }
 }
 
-function showSuccess(payload, data) {
+function showSuccess(payload,data) {
   document.getElementById('mainFlow').style.display='none';
   document.getElementById('successScreen').classList.add('active');
-  document.getElementById('successMsg').textContent =
-    `${payload.tipo} ${payload.medida} actualizado. Quedan ${data.stockRestante} piezas.`;
-  document.getElementById('successDetail').innerHTML = `
+  document.getElementById('successMsg').textContent=`${payload.tipo} ${payload.medida} actualizado. Quedan ${data.stockRestante} piezas.`;
+  document.getElementById('successDetail').innerHTML=`
     <div class="confirm-row"><span class="confirm-label">Persona</span><span class="confirm-value">${payload.nombre}</span></div>
-    <div class="confirm-row"><span class="confirm-label">Pieza</span><span class="confirm-value">${payload.tipo} ${payload.medida} x ${payload.largo}</span></div>
+    <div class="confirm-row"><span class="confirm-label">Pieza</span><span class="confirm-value">${payload.tipo} ${payload.medida} × ${payload.largo}</span></div>
     <div class="confirm-row"><span class="confirm-label">Cantidad</span><span class="confirm-value">${payload.cantidad} piezas</span></div>
     <div class="confirm-row"><span class="confirm-label">Stock restante</span><span class="confirm-value">${data.stockRestante} piezas</span></div>
   `;
@@ -624,14 +659,8 @@ function showSuccess(payload, data) {
 function resetForm() {
   document.getElementById('mainFlow').style.display='block';
   document.getElementById('successScreen').classList.remove('active');
-  document.getElementById('nombre').value='';
-  document.getElementById('cantidad').value='';
-  document.getElementById('motivo').value='';
-  document.getElementById('searchTorn').value='';
-  document.getElementById('filtroTipo').value='';
-  document.getElementById('filtroSistema').value='';
-  document.getElementById('filtroMaterial').value='';
-  document.getElementById('filtroEstado').value='';
+  ['nombre','cantidad','motivo','searchTorn'].forEach(id=>document.getElementById(id).value='');
+  ['filtroTipo','filtroSistema','filtroMaterial','filtroEstado'].forEach(id=>document.getElementById(id).value='');
   selMat=null; listaActiva=[]; materiales=[];
   setStep(1);
 }
