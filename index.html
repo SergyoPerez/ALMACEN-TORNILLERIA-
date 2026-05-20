@@ -324,18 +324,17 @@
     <div class="filtros-grid">
       <div class="filtro-wrap">
         <span class="filtro-label">Tipo</span>
-        <select id="filtroTipo" onchange="aplicarFiltros()">
+        <select id="filtroTipo" onchange="onTipoChange()">
           <option value="">Todos</option>
           <optgroup label="── Tornillos ──">
           <option value="Tornillo Allen">Tornillo Allen</option>
-          <option value="Tornillo Allen Conico">Tornillo Allen Conico</option>
+          <option value="Tornillo Conico Allen">Tornillo Conico Allen</option>
           <option value="Tornillo Boton Allen">Tornillo Boton Allen</option>
-          <option value="Tornillo Cruz">Tornillo Cruz</option>
-          <option value="Tornillo Cruz Conico">Tornillo Cruz Conico</option>
           <option value="Tornillo Boton Cruz">Tornillo Boton Cruz</option>
+          <option value="Tornillo Boton Plano">Tornillo Boton Plano</option>
+          <option value="Tornillo Conico Cruz">Tornillo Conico Cruz</option>
+          <option value="Tornillo Conico Plano">Tornillo Conico Plano</option>
           <option value="Tornillo Hexagonal">Tornillo Hexagonal</option>
-          <option value="Tornillo Plano">Tornillo Plano</option>
-          <option value="Tornillo Plano Conico">Tornillo Plano Conico</option>
           </optgroup>
           <optgroup label="── Tuercas ──">
           <option value="Tuerca">Tuerca</option>
@@ -491,7 +490,7 @@ function loadMateriales() {
     .then(r => r.json())
     .then(data => {
       materiales = data.materiales || [];
-      onSistemaChange(); // popula medidas y aplica filtros
+      onTipoChange(); // popula sistemas y medidas en cascada
     })
     .catch(() => {
       document.getElementById('tablaBody').innerHTML = '<tr><td colspan="6" class="tabla-empty">⚠️ No se pudo cargar. Verifica conexión.</td></tr>';
@@ -499,54 +498,85 @@ function loadMateriales() {
     });
 }
 
-// Cuando cambia el sistema, actualiza las medidas disponibles
-function onSistemaChange() {
+// Filtra materiales según los filtros activos (sin el de medida para poder recalcularla)
+function filtrarBase(ignorarMedida = false) {
+  const tipo    = document.getElementById('filtroTipo').value;
   const sistema = document.getElementById('filtroSistema').value;
-  const sel = document.getElementById('filtroMedida');
-  sel.innerHTML = '<option value="">Todas</option>';
+  const medida  = ignorarMedida ? '' : document.getElementById('filtroMedida').value;
+  const mat     = document.getElementById('filtroMaterial').value;
+  const texto   = normalizar(document.getElementById('searchTorn').value.trim());
 
-  // Filtrar medidas únicas del sistema seleccionado
-  const medidas = [...new Set(
+  return materiales.filter(m => {
+    if (tipo    && normalizar(m.tipo)    !== normalizar(tipo))    return false;
+    if (sistema && normalizar(m.sistema) !== normalizar(sistema)) return false;
+    if (medida  && m.medida              !== medida)              return false;
+    if (mat     && normalizar(m.material)!== normalizar(mat))     return false;
+    if (texto) {
+      const h = normalizar([m.tipo,m.medida,m.largo,m.material,m.sistema].join(' '));
+      if (!texto.split(/\s+/).every(p => h.includes(p))) return false;
+    }
+    return true;
+  });
+}
+
+// Cuando cambia Tipo: actualiza Sistema y Medida disponibles
+function onTipoChange() {
+  const tipo = document.getElementById('filtroTipo').value;
+
+  // Recalcular sistemas disponibles para este tipo
+  const sistemas = [...new Set(
     materiales
-      .filter(m => !sistema || normalizar(m.sistema) === normalizar(sistema))
-      .map(m => m.medida)
-      .filter(Boolean)
+      .filter(m => !tipo || normalizar(m.tipo) === normalizar(tipo))
+      .map(m => m.sistema).filter(Boolean)
+  )].sort();
+
+  const selSist = document.getElementById('filtroSistema');
+  const sistActual = selSist.value;
+  selSist.innerHTML = '<option value="">Todos</option>';
+  sistemas.forEach(s => {
+    const opt = document.createElement('option');
+    opt.value = s; opt.textContent = s;
+    if (s === sistActual) opt.selected = true;
+    selSist.appendChild(opt);
+  });
+
+  // Si el sistema actual ya no existe para este tipo, resetear
+  if (sistActual && !sistemas.includes(sistActual)) selSist.value = '';
+
+  onSistemaChange();
+}
+
+// Cuando cambia Sistema: actualiza Medidas disponibles
+function onSistemaChange() {
+  // Filtrar con tipo+sistema actuales para sacar medidas válidas
+  const listaBase = filtrarBase(true);
+
+  const medidas = [...new Set(
+    listaBase.map(m => m.medida).filter(Boolean)
   )].sort((a, b) => {
-    // Ordenar: métricas numéricamente por el número M
     const numA = parseFloat(a.replace(/[^0-9.]/g, '')) || 0;
     const numB = parseFloat(b.replace(/[^0-9.]/g, '')) || 0;
     return numA - numB || a.localeCompare(b);
   });
 
-  medidas.forEach(m => {
+  const selMed = document.getElementById('filtroMedida');
+  const medActual = selMed.value;
+  selMed.innerHTML = '<option value="">Todas</option>';
+  medidas.forEach(med => {
     const opt = document.createElement('option');
-    opt.value = m; opt.textContent = m;
-    sel.appendChild(opt);
+    opt.value = med; opt.textContent = med;
+    if (med === medActual) opt.selected = true;
+    selMed.appendChild(opt);
   });
+
+  // Si la medida actual ya no existe, resetear
+  if (medActual && !medidas.includes(medActual)) selMed.value = '';
 
   aplicarFiltros();
 }
 
 function aplicarFiltros() {
-  const tipo    = document.getElementById('filtroTipo').value;
-  const sistema = document.getElementById('filtroSistema').value;
-  const medida  = document.getElementById('filtroMedida').value;
-  const mat     = document.getElementById('filtroMaterial').value;
-  const texto   = normalizar(document.getElementById('searchTorn').value.trim());
-
-  let lista = materiales.filter(m => {
-    if (tipo   && normalizar(m.tipo)     !== normalizar(tipo))    return false;
-    if (sistema && normalizar(m.sistema) !== normalizar(sistema)) return false;
-    if (medida && m.medida               !== medida)              return false;
-    if (mat    && normalizar(m.material) !== normalizar(mat))     return false;
-    if (texto) {
-      const campos = [m.tipo, m.medida, m.largo, m.material, m.sistema];
-      const haystack = normalizar(campos.join(' '));
-      const palabras = texto.split(/\s+/);
-      if (!palabras.every(p => haystack.includes(p))) return false;
-    }
-    return true;
-  });
+  const lista = filtrarBase();
 
   if (sortCol) {
     lista = lista.slice().sort((a,b) => {
@@ -717,6 +747,7 @@ function resetForm() {
   document.getElementById('successScreen').classList.remove('active');
   ['nombre','cantidad','motivo','searchTorn'].forEach(id=>document.getElementById(id).value='');
   ['filtroTipo','filtroSistema','filtroMedida','filtroMaterial'].forEach(id=>document.getElementById(id).value='');
+  onTipoChange();
   selMat=null; listaActiva=[]; materiales=[];
   setStep(1);
 }
