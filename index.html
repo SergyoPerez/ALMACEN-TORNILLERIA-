@@ -405,6 +405,13 @@
       <div class="sel-card-title" id="selNombre">—</div>
       <div class="sel-card-detail" id="selDetalle">—</div>
     </div>
+    <div id="selLugar" style="display:none;align-items:center;gap:8px;margin-bottom:14px;background:rgba(26,111,196,.08);border:1.5px solid rgba(26,111,196,.3);border-radius:var(--radius-sm);padding:10px 14px;">
+      <span style="font-size:18px">📍</span>
+      <div>
+        <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.7px;">Ubicación en almacén</div>
+        <div style="font-size:18px;font-weight:700;color:var(--accent-light);font-family:'DM Mono',monospace;" id="selLugar"><span>—</span></div>
+      </div>
+    </div>
     <div class="qty-row">
       <input type="number" id="cantidad" placeholder="Cantidad de piezas" min="1" step="1" inputmode="numeric">
     </div>
@@ -616,6 +623,12 @@ function goStep3() {
   setStep(3);
   document.getElementById('selNombre').textContent=`${selMat.tipo} ${selMat.medida} × ${selMat.largo} — ${selMat.material}`;
   document.getElementById('selDetalle').textContent=`Stock: ${selMat.piezas} piezas · Mínimo: ${selMat.minimo} piezas · ${selMat.sistema||''}`;
+  // Show location
+  const lugarEl = document.getElementById('selLugar');
+  if (selMat.lugar) {
+    lugarEl.style.display='flex';
+    lugarEl.querySelector('span').textContent = selMat.lugar;
+  } else { lugarEl.style.display='none'; }
   document.getElementById('cantidad').addEventListener('input', updateAlerta);
   updateAlerta();
 }
@@ -646,6 +659,7 @@ function goStep4() {
     <div class="confirm-row"><span class="confirm-label">Material</span><span class="confirm-value">${selMat.material} · ${selMat.sistema||''}</span></div>
     <div class="confirm-row"><span class="confirm-label">Cantidad</span><span class="confirm-value">${cant} piezas</span></div>
     <div class="confirm-row"><span class="confirm-label">Motivo</span><span class="confirm-value">${mot||'—'}</span></div>
+    <div class="confirm-row"><span class="confirm-label">Ubicación</span><span class="confirm-value" style="color:var(--accent-light);font-family:'DM Mono',monospace;font-size:16px;font-weight:700">${selMat.lugar||'—'}</span></div>
     <div class="confirm-row"><span class="confirm-label">Stock restante</span><span class="confirm-value">${r} piezas</span></div>
   `;
   let ah='';
@@ -670,7 +684,8 @@ async function enviarRetiro() {
     material:selMat.material, sistema:selMat.sistema,
     cantidad:parseInt(document.getElementById('cantidad').value),
     motivo:document.getElementById('motivo').value.trim(),
-    fila:selMat.fila
+    fila:selMat.fila,
+    lugar:selMat.lugar||''
   };
 
   try {
@@ -692,6 +707,7 @@ function showSuccess(payload,data) {
     <div class="confirm-row"><span class="confirm-label">Persona</span><span class="confirm-value">${payload.nombre}</span></div>
     <div class="confirm-row"><span class="confirm-label">Pieza</span><span class="confirm-value">${payload.tipo} ${payload.medida} × ${payload.largo}</span></div>
     <div class="confirm-row"><span class="confirm-label">Cantidad</span><span class="confirm-value">${payload.cantidad} piezas</span></div>
+    <div class="confirm-row"><span class="confirm-label">Ubicación</span><span class="confirm-value" style="color:var(--accent-light);font-family:'DM Mono',monospace;font-size:16px;font-weight:700">${payload.lugar||'—'}</span></div>
     <div class="confirm-row"><span class="confirm-label">Stock restante</span><span class="confirm-value">${data.stockRestante} piezas</span></div>
   `;
 }
