@@ -352,7 +352,7 @@ tr.item-row:active td{background:rgba(26,111,196,.14)}
         </tbody>
       </table>
     </div>
-    <div class="error-msg" id="err2">Selecciona una pieza para continuar.</div>
+    <div class="error-msg" id="errMat">Selecciona una pieza para continuar.</div>
   </div>
 
   <!-- PASO 4: Cantidad -->
@@ -712,8 +712,7 @@ function seleccionarMov(tipo) {
 }
 
 function goStep3() {
-  if (!selMat) { document.getElementById('err3mat').style.display = 'block'; return; }
-  document.getElementById('err3mat').style.display = 'none';
+  if (!selMat) return;
   setStep(4);
 
   document.getElementById('selNombre').textContent =
