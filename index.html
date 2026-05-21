@@ -355,11 +355,11 @@ tr.item-row:active td{background:rgba(26,111,196,.14)}
     <div class="error-msg" id="err2">Selecciona una pieza para continuar.</div>
   </div>
 
-  <!-- PASO 3 -->
+  <!-- PASO 4: Cantidad -->
   <div class="card" id="step4">
     <div class="back-link" onclick="goBack(3)">← Volver</div>
-    <div class="card-label">Paso 4 de 5</div>
-    <div class="card-title">¿Cuántas piezas retiras?</div>
+    <div class="card-label">Paso 4 de 6</div>
+    <div class="card-title" id="tituloPaso4">¿Cuántas piezas retiras?</div>
 
     <div class="sel-card active" id="selCard">
       <div class="sel-title" id="selNombre">—</div>
@@ -375,23 +375,49 @@ tr.item-row:active td{background:rgba(26,111,196,.14)}
     </div>
 
     <div class="qty-row">
-      <input type="number" id="cantidad" id="cantidadInput" placeholder="Cantidad de piezas" min="1" step="1" inputmode="numeric">
+      <input type="number" id="cantidad" placeholder="Cantidad de piezas" min="1" step="1" inputmode="numeric">
     </div>
     <div id="alertaStock"></div>
     <div class="error-msg" id="err3">Ingresa una cantidad válida.</div>
     <input type="text" id="motivo" placeholder="Motivo / proyecto (opcional)" style="margin-bottom:14px" autocapitalize="sentences">
-    <button class="btn btn-primary" onclick="goStep4()">Revisar →</button>
+    <button class="btn btn-primary" onclick="goStep4()">Continuar →</button>
   </div>
 
-  <!-- PASO 4 -->
+  <!-- PASO 5: Tuerca y Roldana opcionales -->
+  <div class="card" id="step4b">
+    <div class="back-link" onclick="goBack(4)">← Volver</div>
+    <div class="card-label">Paso 5 de 6</div>
+    <div class="card-title">¿Agregas tuerca o roldana?</div>
+
+    <div id="tuercaSection" style="margin-bottom:18px">
+      <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px">Tuerca</div>
+      <div id="tuercaOpciones" style="display:flex;flex-direction:column;gap:8px"></div>
+      <div id="tuercaCantWrap" style="display:none;margin-top:8px">
+        <input type="number" id="cantTuercaInput" placeholder="Cantidad de tuercas" min="1" step="1" inputmode="numeric">
+      </div>
+    </div>
+
+    <div id="roldanaSection">
+      <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px">Roldana</div>
+      <div id="roldanaOpciones" style="display:flex;flex-direction:column;gap:8px"></div>
+      <div id="roldanaCantWrap" style="display:none;margin-top:8px">
+        <input type="number" id="cantRoldanaInput" placeholder="Cantidad de roldanas" min="1" step="1" inputmode="numeric">
+      </div>
+    </div>
+
+    <br>
+    <button class="btn btn-primary" onclick="goStep5()">Continuar →</button>
+  </div>
+
+  <!-- PASO 6: Confirmar -->
   <div class="card" id="step5">
-    <div class="back-link" onclick="goBack(3)">← Corregir</div>
-    <div class="card-label">Paso 4 de 4</div>
-    <div class="card-title">Confirma el retiro</div>
+    <div class="back-link" onclick="goBack(5)">← Corregir</div>
+    <div class="card-label">Paso 6 de 6</div>
+    <div class="card-title">Confirma el movimiento</div>
     <div class="confirm-card" id="confirmResumen"></div>
     <div id="confirmAlerta"></div>
     <button class="btn btn-primary" id="btnConfirmar" onclick="enviarRetiro()">
-      <span id="btnTxt">✓ Confirmar retiro</span>
+      <span id="btnTxt">✓ Confirmar</span>
       <div class="spinner" id="btnSpinner"></div>
     </button>
     <div class="error-msg" id="errEnvio"></div>
