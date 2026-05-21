@@ -192,6 +192,17 @@ tr.item-row:active td{background:rgba(26,111,196,.14)}
 @keyframes popIn{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
 .success-title{font-size:24px;font-weight:700;margin-bottom:8px}
 .success-sub{font-size:14px;color:var(--text2);margin-bottom:32px;line-height:1.6}
+.mov-btn{background:var(--surface2);border:1.5px solid var(--border);
+  border-radius:var(--radius);padding:20px;cursor:pointer;transition:all .2s;
+  display:flex;flex-direction:column;align-items:center;color:var(--text);width:100%}
+.mov-btn:hover{border-color:var(--accent);background:rgba(26,111,196,.08)}
+.mov-btn.selected{border-color:var(--accent);background:rgba(26,111,196,.12);
+  box-shadow:0 0 0 2px rgba(26,111,196,.3)}
+.acc-item{background:var(--surface2);border:1.5px solid var(--border);
+  border-radius:var(--radius-sm);padding:12px 14px;cursor:pointer;transition:all .15s}
+.acc-item:hover{border-color:var(--accent);background:rgba(26,111,196,.06)}
+.acc-item.selected{border-color:var(--accent);background:rgba(26,111,196,.12);
+  box-shadow:0 0 0 2px rgba(26,111,196,.25)}
 .success-detail{background:var(--surface);border:1px solid var(--border);
   border-radius:var(--radius);padding:16px 20px;width:100%;text-align:left;margin-bottom:24px}
 </style>
@@ -229,6 +240,10 @@ tr.item-row:active td{background:rgba(26,111,196,.14)}
     <div class="step-dot" id="dot3">3</div>
     <div class="step-line" id="line3"></div>
     <div class="step-dot" id="dot4">4</div>
+    <div class="step-line" id="line4"></div>
+    <div class="step-dot" id="dot4b">5</div>
+    <div class="step-line" id="line4b"></div>
+    <div class="step-dot" id="dot5">6</div>
   </div>
 
   <!-- PASO 1 -->
@@ -241,8 +256,28 @@ tr.item-row:active td{background:rgba(26,111,196,.14)}
     <button class="btn btn-primary" onclick="goStep2()">Continuar →</button>
   </div>
 
-  <!-- PASO 2 -->
+  <!-- PASO 2: Tipo de movimiento -->
   <div class="card" id="step2">
+    <div class="back-link" onclick="goBack(1)">← Volver</div>
+    <div class="card-label">Paso 2 de 5</div>
+    <div class="card-title">¿Qué vas a hacer?</div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <button onclick="seleccionarMov('Salida')" class="mov-btn" id="btnSalida">
+        <div style="font-size:28px;margin-bottom:6px">📤</div>
+        <div style="font-size:16px;font-weight:700">Retirar material</div>
+        <div style="font-size:12px;color:var(--text2);margin-top:2px">Descuenta del inventario</div>
+      </button>
+      <button onclick="seleccionarMov('Entrada')" class="mov-btn" id="btnEntrada">
+        <div style="font-size:28px;margin-bottom:6px">📥</div>
+        <div style="font-size:16px;font-weight:700">Meter material</div>
+        <div style="font-size:12px;color:var(--text2);margin-top:2px">Suma al inventario</div>
+      </button>
+    </div>
+    <div class="error-msg" id="err2">Selecciona una opción para continuar.</div>
+  </div>
+
+  <!-- PASO 3: Material -->
+  <div class="card" id="step3">
     <div class="back-link" onclick="goBack(1)">← Volver</div>
     <div class="card-label">Paso 2 de 4</div>
     <div class="card-title">¿Qué pieza retiras?</div>
@@ -321,9 +356,9 @@ tr.item-row:active td{background:rgba(26,111,196,.14)}
   </div>
 
   <!-- PASO 3 -->
-  <div class="card" id="step3">
-    <div class="back-link" onclick="goBack(2)">← Volver</div>
-    <div class="card-label">Paso 3 de 4</div>
+  <div class="card" id="step4">
+    <div class="back-link" onclick="goBack(3)">← Volver</div>
+    <div class="card-label">Paso 4 de 5</div>
     <div class="card-title">¿Cuántas piezas retiras?</div>
 
     <div class="sel-card active" id="selCard">
@@ -340,7 +375,7 @@ tr.item-row:active td{background:rgba(26,111,196,.14)}
     </div>
 
     <div class="qty-row">
-      <input type="number" id="cantidad" placeholder="Cantidad de piezas" min="1" step="1" inputmode="numeric">
+      <input type="number" id="cantidad" id="cantidadInput" placeholder="Cantidad de piezas" min="1" step="1" inputmode="numeric">
     </div>
     <div id="alertaStock"></div>
     <div class="error-msg" id="err3">Ingresa una cantidad válida.</div>
@@ -349,7 +384,7 @@ tr.item-row:active td{background:rgba(26,111,196,.14)}
   </div>
 
   <!-- PASO 4 -->
-  <div class="card" id="step4">
+  <div class="card" id="step5">
     <div class="back-link" onclick="goBack(3)">← Corregir</div>
     <div class="card-label">Paso 4 de 4</div>
     <div class="card-title">Confirma el retiro</div>
@@ -366,7 +401,7 @@ tr.item-row:active td{background:rgba(26,111,196,.14)}
 <!-- SUCCESS -->
 <div class="success-screen container" id="successScreen">
   <div class="success-icon">✓</div>
-  <div class="success-title">¡Retiro registrado!</div>
+  <div class="success-title" id="successTitle">¡Movimiento registrado!</div>
   <div class="success-sub" id="successMsg">Stock actualizado correctamente.</div>
   <div class="success-detail" id="successDetail"></div>
   <button class="btn btn-primary" onclick="resetForm()" style="max-width:340px">Registrar otro retiro</button>
@@ -377,9 +412,16 @@ tr.item-row:active td{background:rgba(26,111,196,.14)}
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyMkzBslL2Dy8N0fYIkUGeo_QQ85FZi_1ksob7oGDjFgZe5Wo87QgoSvR2ZLi9vROAu/exec";
 // ═══════════════════════════════════════════════════════
 
-let materiales = [];  // todos los datos del sheet (ya con trim)
-let listaActiva = []; // lo que se muestra en la tabla actualmente
-let selMat = null;
+let materiales = [];  // tornillos
+let tuercas    = [];  // tuercas del sheet
+let roldanas   = [];  // roldanas del sheet
+let listaActiva = [];
+let selMat    = null;
+let selTuerca = null; // tuerca seleccionada (opcional)
+let selRoldana= null; // roldana seleccionada (opcional)
+let cantTuerca = 0;
+let cantRoldana= 0;
+let tipoMov = '';
 let sortCol = '';
 let sortDir = 1;
 
@@ -438,16 +480,18 @@ function loadMateriales() {
   fetch(SCRIPT_URL + '?action=getMateriales')
     .then(r => r.json())
     .then(data => {
-      // IMPORTANTE: hacer trim a todos los campos string para evitar espacios ocultos
-      materiales = (data.materiales || []).map(m => ({
+      const limpia = arr => (arr||[]).map(m => ({
         ...m,
-        tipo:     (m.tipo     || '').trim(),
-        medida:   (m.medida   || '').trim(),
-        largo:    (m.largo    || '').trim(),
-        material: (m.material || '').trim(),
-        sistema:  (m.sistema  || '').trim(),
-        lugar:    (m.lugar    || '').trim(),
+        tipo:     (m.tipo     ||'').trim(),
+        medida:   (m.medida   ||'').trim(),
+        largo:    (m.largo    ||'').trim(),
+        material: (m.material ||'').trim(),
+        sistema:  (m.sistema  ||'').trim(),
+        lugar:    (m.lugar    ||'').trim(),
       }));
+      materiales = limpia(data.tornillos || data.materiales || []);
+      tuercas    = limpia(data.tuercas   || []);
+      roldanas   = limpia(data.roldanas  || []);
       rebuildCascade();
     })
     .catch(() => {
@@ -594,17 +638,28 @@ function selectMat(idx) {
 }
 
 // ── Navegación ──────────────────────────────────────────
+// stepOrder maps logical step number to DOM ids
+const STEP_ORDER = ['step1','step2','step3','step4','step4b','step5'];
+const DOT_ORDER  = ['dot1', 'dot2', 'dot3', 'dot4', 'dot4b', 'dot5'];
+const LINE_ORDER = ['line1','line2','line3','line4','line4b'];
+
 function setStep(n) {
-  for (let i = 1; i <= 4; i++) {
-    document.getElementById('step' + i)?.classList.remove('active');
-    const dot = document.getElementById('dot' + i);
-    dot.classList.remove('active', 'done');
-    if (i < n)      { dot.classList.add('done'); dot.textContent = '✓'; }
-    else if (i === n){ dot.classList.add('active'); dot.textContent = i; }
-    else              dot.textContent = i;
-    if (i < 4) document.getElementById('line' + i).classList.toggle('done', i < n);
-  }
-  document.getElementById('step' + n)?.classList.add('active');
+  // n is 1-based index into STEP_ORDER
+  STEP_ORDER.forEach((id, i) => {
+    document.getElementById(id)?.classList.remove('active');
+    const dot = document.getElementById(DOT_ORDER[i]);
+    if (!dot) return;
+    dot.classList.remove('active','done');
+    const pos = i + 1;
+    if (pos < n)       { dot.classList.add('done');   dot.textContent = '✓'; }
+    else if (pos === n){ dot.classList.add('active');  dot.textContent = pos; }
+    else                 dot.textContent = pos;
+  });
+  LINE_ORDER.forEach((id, i) => {
+    const line = document.getElementById(id);
+    if (line) line.classList.toggle('done', i + 1 < n);
+  });
+  document.getElementById(STEP_ORDER[n-1])?.classList.add('active');
   window.scrollTo(0, 0);
 }
 
@@ -613,13 +668,27 @@ function goStep2() {
   if (!n) { document.getElementById('err1').style.display = 'block'; return; }
   document.getElementById('err1').style.display = 'none';
   setStep(2);
-  loadMateriales();
+}
+
+function seleccionarMov(tipo) {
+  tipoMov = tipo;
+  document.querySelectorAll('.mov-btn').forEach(b => b.classList.remove('selected'));
+  document.getElementById(tipo === 'Salida' ? 'btnSalida' : 'btnEntrada').classList.add('selected');
+  
+  // Actualizar título del paso 4 según tipo
+  const titulo = document.getElementById('tituloPaso4');
+  if (titulo) titulo.textContent = tipo === 'Salida' ? '¿Cuántas piezas retiras?' : '¿Cuántas piezas metes?';
+
+  setTimeout(() => {
+    setStep(3);
+    loadMateriales();
+  }, 150);
 }
 
 function goStep3() {
-  if (!selMat) { document.getElementById('err2').style.display = 'block'; return; }
-  document.getElementById('err2').style.display = 'none';
-  setStep(3);
+  if (!selMat) { document.getElementById('err3mat').style.display = 'block'; return; }
+  document.getElementById('err3mat').style.display = 'none';
+  setStep(4);
 
   document.getElementById('selNombre').textContent =
     `${selMat.tipo} ${selMat.medida} × ${selMat.largo} — ${selMat.material}`;
@@ -645,17 +714,22 @@ function updateAlerta() {
   const cant = parseInt(document.getElementById('cantidad').value) || 0;
   const al = document.getElementById('alertaStock');
   if (!selMat || cant <= 0) { al.innerHTML = ''; return; }
-  if (cant > selMat.piezas) {
-    al.innerHTML = `<div class="alert alert-danger">⛔ Stock insuficiente. Solo hay ${selMat.piezas} piezas.</div>`;
-    return;
+  if (tipoMov === 'Salida') {
+    if (cant > selMat.piezas) {
+      al.innerHTML = `<div class="alert alert-danger">⛔ Stock insuficiente. Solo hay ${selMat.piezas} piezas.</div>`;
+      return;
+    }
+    const r = selMat.piezas - cant;
+    if (r <= selMat.minimo * 0.5)
+      al.innerHTML = `<div class="alert alert-danger">🔴 Quedarán <strong>${r} piezas</strong> — nivel CRÍTICO.</div>`;
+    else if (r <= selMat.minimo)
+      al.innerHTML = `<div class="alert alert-warn">⚠️ Quedarán <strong>${r} piezas</strong> — bajo el mínimo.</div>`;
+    else
+      al.innerHTML = `<div class="alert alert-info">ℹ️ Quedarán <strong>${r} piezas</strong> en inventario.</div>`;
+  } else {
+    const r = selMat.piezas + cant;
+    al.innerHTML = `<div class="alert alert-info">📥 El stock quedará en <strong>${r} piezas</strong> después de la entrada.</div>`;
   }
-  const r = selMat.piezas - cant;
-  if (r <= selMat.minimo * 0.5)
-    al.innerHTML = `<div class="alert alert-danger">🔴 Quedarán <strong>${r} piezas</strong> — nivel CRÍTICO.</div>`;
-  else if (r <= selMat.minimo)
-    al.innerHTML = `<div class="alert alert-warn">⚠️ Quedarán <strong>${r} piezas</strong> — bajo el mínimo.</div>`;
-  else
-    al.innerHTML = `<div class="alert alert-info">ℹ️ Quedarán <strong>${r} piezas</strong> en inventario.</div>`;
 }
 
 function goStep4() {
@@ -663,10 +737,15 @@ function goStep4() {
   const e = document.getElementById('err3');
   if (!cant || cant <= 0) { e.style.display = 'block'; return; }
   e.style.display = 'none';
-  if (cant > selMat.piezas) { e.textContent = 'Stock insuficiente.'; e.style.display = 'block'; return; }
-  setStep(4);
+  if (tipoMov === 'Salida' && cant > selMat.piezas) { e.textContent = 'Stock insuficiente.'; e.style.display = 'block'; return; }
+  goStep4b();
+  return; // confirm is now in goStep4Confirm
+}
 
-  const r = selMat.piezas - cant;
+function goStep4Confirm() {
+  const cant = parseInt(document.getElementById('cantidad').value);
+  const r = tipoMov === 'Salida' ? selMat.piezas - cant : selMat.piezas + cant;
+  setStep(6); // step5 is position 6
   const mot = document.getElementById('motivo').value.trim();
 
   document.getElementById('confirmResumen').innerHTML = `
@@ -692,6 +771,105 @@ function goStep4() {
   else if (r <= selMat.minimo)
     ah = `<div class="alert alert-warn" style="margin-bottom:14px">⚠️ Stock bajo. Considera reabastecer.</div>`;
   document.getElementById('confirmAlerta').innerHTML = ah;
+
+  // Agregar tuerca/roldana al resumen si fueron seleccionadas
+  let extraHTML = '';
+  if (selTuerca && cantTuerca > 0) {
+    extraHTML += `<div class="confirm-row"><span class="confirm-label">+ Tuerca</span>
+      <span class="confirm-value">${selTuerca.tipo} ${selTuerca.medida} × ${cantTuerca} pzas · 📍${selTuerca.lugar||'—'}</span></div>`;
+  }
+  if (selRoldana && cantRoldana > 0) {
+    extraHTML += `<div class="confirm-row"><span class="confirm-label">+ Roldana</span>
+      <span class="confirm-value">${selRoldana.tipo} ${selRoldana.medida} × ${cantRoldana} pzas · 📍${selRoldana.lugar||'—'}</span></div>`;
+  }
+  if (extraHTML) {
+    document.getElementById('confirmResumen').innerHTML += extraHTML;
+  }
+}
+
+function goStep4b() {
+  // Cargar tuercas y roldanas que coincidan con la medida del tornillo seleccionado
+  const medida = selMat.medida;
+  selTuerca  = null;
+  selRoldana = null;
+
+  // Tuercas coincidentes
+  const tuercasMatch = tuercas.filter(t => t.medida === medida);
+  const tuercaDiv = document.getElementById('tuercaOpciones');
+  const tuercaCantWrap = document.getElementById('tuercaCantWrap');
+
+  if (tuercasMatch.length === 0) {
+    tuercaDiv.innerHTML = `<div style="font-size:13px;color:var(--text2);padding:10px;background:var(--surface2);border-radius:var(--radius-sm)">No hay tuercas con medida ${medida}</div>`;
+    tuercaCantWrap.style.display = 'none';
+  } else {
+    tuercaDiv.innerHTML = tuercasMatch.map((t,i) => `
+      <div class="acc-item" id="tuerca_${i}" onclick="selAcc('tuerca',${i})" data-idx="${i}">
+        <div style="font-size:13px;font-weight:600">${t.tipo} ${t.medida} — ${t.material}</div>
+        <div style="font-size:12px;color:var(--text2)">${t.piezas} piezas en stock · ${t.lugar||'Sin ubicación'}</div>
+      </div>`).join('');
+    tuercaCantWrap.style.display = 'none';
+  }
+
+  // Roldanas coincidentes
+  const roldanasMatch = roldanas.filter(r => r.medida === medida);
+  const roldanaDiv = document.getElementById('roldanaOpciones');
+  const roldanaCantWrap = document.getElementById('roldanaCantWrap');
+
+  if (roldanasMatch.length === 0) {
+    roldanaDiv.innerHTML = `<div style="font-size:13px;color:var(--text2);padding:10px;background:var(--surface2);border-radius:var(--radius-sm)">No hay roldanas con medida ${medida}</div>`;
+    roldanaCantWrap.style.display = 'none';
+  } else {
+    roldanaDiv.innerHTML = roldanasMatch.map((r,i) => `
+      <div class="acc-item" id="roldana_${i}" onclick="selAcc('roldana',${i})" data-idx="${i}">
+        <div style="font-size:13px;font-weight:600">${r.tipo} ${r.medida} — ${r.material}</div>
+        <div style="font-size:12px;color:var(--text2)">${r.piezas} piezas en stock · ${r.lugar||'Sin ubicación'}</div>
+      </div>`).join('');
+    roldanaCantWrap.style.display = 'none';
+  }
+
+  // Store matches for selection
+  window._tuercasMatch  = tuercasMatch;
+  window._roldanasMatch = roldanasMatch;
+
+  setStep(5); // step4b is position 5
+}
+
+function selAcc(tipo, idx) {
+  const items = tipo === 'tuerca' ? window._tuercasMatch : window._roldanasMatch;
+  const item  = items[idx];
+  const cantWrap = document.getElementById(tipo + 'CantWrap');
+
+  if (tipo === 'tuerca') {
+    if (selTuerca && selTuerca.fila === item.fila) {
+      // Deselect
+      selTuerca = null;
+      document.querySelectorAll('[id^="tuerca_"]').forEach(el => el.classList.remove('selected'));
+      cantWrap.style.display = 'none';
+    } else {
+      selTuerca = item;
+      document.querySelectorAll('[id^="tuerca_"]').forEach(el => el.classList.remove('selected'));
+      document.getElementById('tuerca_' + idx).classList.add('selected');
+      cantWrap.style.display = 'block';
+    }
+  } else {
+    if (selRoldana && selRoldana.fila === item.fila) {
+      selRoldana = null;
+      document.querySelectorAll('[id^="roldana_"]').forEach(el => el.classList.remove('selected'));
+      cantWrap.style.display = 'none';
+    } else {
+      selRoldana = item;
+      document.querySelectorAll('[id^="roldana_"]').forEach(el => el.classList.remove('selected'));
+      document.getElementById('roldana_' + idx).classList.add('selected');
+      cantWrap.style.display = 'block';
+    }
+  }
+}
+
+function goStep5() {
+  cantTuerca  = selTuerca  ? (parseInt(document.getElementById('cantTuercaInput').value)  || 0) : 0;
+  cantRoldana = selRoldana ? (parseInt(document.getElementById('cantRoldanaInput').value) || 0) : 0;
+  // Build confirm
+  goStep4Confirm();
 }
 
 function goBack(n) { setStep(n); }
@@ -706,7 +884,8 @@ async function enviarRetiro() {
   sp.style.display = 'block'; er.style.display = 'none';
 
   const payload = {
-    action:   'registrarRetiro',
+    action:   'registrarMovimiento',
+    tipoMov:  tipoMov,
     nombre:   document.getElementById('nombre').value.trim(),
     tipo:     selMat.tipo,
     medida:   selMat.medida,
@@ -716,7 +895,9 @@ async function enviarRetiro() {
     cantidad: parseInt(document.getElementById('cantidad').value),
     motivo:   document.getElementById('motivo').value.trim(),
     fila:     selMat.fila,
-    lugar:    selMat.lugar || ''
+    lugar:    selMat.lugar || '',
+    tuerca:   selTuerca  && cantTuerca  > 0 ? { ...selTuerca,  cantidad: cantTuerca  } : null,
+    roldana:  selRoldana && cantRoldana > 0 ? { ...selRoldana, cantidad: cantRoldana } : null,
   };
 
   try {
@@ -733,6 +914,7 @@ async function enviarRetiro() {
 function showSuccess(payload, data) {
   document.getElementById('mainFlow').style.display = 'none';
   document.getElementById('successScreen').classList.add('active');
+  document.getElementById('successTitle') && (document.getElementById('successTitle').textContent = tipoMov === 'Salida' ? '¡Salida registrada!' : '¡Entrada registrada!');
   document.getElementById('successMsg').textContent =
     `${payload.tipo} ${payload.medida} actualizado. Quedan ${data.stockRestante} piezas.`;
   document.getElementById('successDetail').innerHTML = `
@@ -756,7 +938,9 @@ function resetForm() {
     document.getElementById(id).value = '');
   ['filtroTipo','filtroSistema','filtroMedida','filtroMaterial'].forEach(id =>
     document.getElementById(id).value = '');
-  selMat = null; listaActiva = []; materiales = [];
+  selMat = null; selTuerca = null; selRoldana = null; cantTuerca = 0; cantRoldana = 0;
+  listaActiva = []; materiales = []; tuercas = []; roldanas = []; tipoMov = '';
+  document.querySelectorAll('.mov-btn').forEach(b => b.classList.remove('selected'));
   setStep(1);
 }
 </script>
