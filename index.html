@@ -976,6 +976,12 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js').catch(() => {});
   });
 }
+// Precarga el inventario en segundo plano desde que abre la app
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    if (materiales.length === 0) loadMateriales();
+  }, 800); // espera 800ms para no bloquear el render inicial
+});
 </script>
 </body>
 </html>
