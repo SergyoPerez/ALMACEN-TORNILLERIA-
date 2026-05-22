@@ -196,6 +196,12 @@ tr.item-row:active td{background:rgba(26,111,196,.14)}
   border-radius:var(--radius);padding:20px;cursor:pointer;transition:all .2s;
   display:flex;flex-direction:column;align-items:center;color:var(--text);width:100%}
 .mov-btn:hover{border-color:var(--accent);background:rgba(26,111,196,.08)}
+.tab-row{display:flex;gap:8px;margin-bottom:14px}
+.tab-btn{flex:1;padding:10px;border:1.5px solid var(--border);border-radius:var(--radius-sm);
+  background:var(--surface2);color:var(--text2);font-family:'DM Sans',sans-serif;
+  font-size:14px;font-weight:600;cursor:pointer;transition:all .2s}
+.tab-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;
+  box-shadow:0 2px 12px rgba(26,111,196,.4)}
 .mov-btn.selected{border-color:var(--accent);background:rgba(26,111,196,.12);
   box-shadow:0 0 0 2px rgba(26,111,196,.3)}
 .acc-item{background:var(--surface2);border:1.5px solid var(--border);
@@ -278,31 +284,22 @@ tr.item-row:active td{background:rgba(26,111,196,.14)}
 
   <!-- PASO 3: Material -->
   <div class="card" id="step3">
-    <div class="back-link" onclick="goBack(1)">← Volver</div>
-    <div class="card-label">Paso 2 de 4</div>
+    <div class="back-link" onclick="goBack(2)">← Volver</div>
+    <div class="card-label">Paso 3 de 6</div>
     <div class="card-title">¿Qué pieza retiras?</div>
 
-    <div class="divider"><span>Filtros en cascada</span></div>
+    <!-- Tabs Tornillo / Tuerca -->
+    <div class="tab-row">
+      <button class="tab-btn active" id="tabTornillo" onclick="switchTab('tornillo')">🔩 Tornillo</button>
+      <button class="tab-btn" id="tabTuerca" onclick="switchTab('tuerca')">◉ Tuerca</button>
+    </div>
+
+    <!-- Filtros -->
     <div class="filtros-grid">
       <div class="filtro-wrap">
         <span class="filtro-label">Tipo</span>
         <select id="filtroTipo" onchange="onTipoChange()">
           <option value="">Todos</option>
-          <optgroup label="── Tornillos ──">
-            <option value="Tornillo Allen">Tornillo Allen</option>
-            <option value="Tornillo Conico Allen">Tornillo Conico Allen</option>
-            <option value="Tornillo Boton Allen">Tornillo Boton Allen</option>
-            <option value="Tornillo Boton Cruz">Tornillo Boton Cruz</option>
-            <option value="Tornillo Boton Plano">Tornillo Boton Plano</option>
-            <option value="Tornillo Conico Cruz">Tornillo Conico Cruz</option>
-            <option value="Tornillo Conico Plano">Tornillo Conico Plano</option>
-            <option value="Tornillo Hexagonal">Tornillo Hexagonal</option>
-          </optgroup>
-          <optgroup label="── Tuercas ──">
-            <option value="Tuerca">Tuerca</option>
-            <option value="Tuerca Seguridad">Tuerca Seguridad</option>
-            <option value="Tuerca Mariposa">Tuerca Mariposa</option>
-          </optgroup>
         </select>
       </div>
       <div class="filtro-wrap">
@@ -328,9 +325,8 @@ tr.item-row:active td{background:rgba(26,111,196,.14)}
       </div>
     </div>
 
-    <div class="divider"><span>Búsqueda por texto</span></div>
     <div class="search-row">
-      <input type="text" id="searchTorn" placeholder="Ej: M6x1.0, 5/16-18, 30mm, Allen..." autocomplete="off" autocorrect="off" autocapitalize="off">
+      <input type="text" id="searchTorn" placeholder="Buscar por medida, tipo, material..." autocomplete="off" autocorrect="off" autocapitalize="off">
       <button onclick="aplicarFiltros()">Buscar</button>
     </div>
 
@@ -438,15 +434,17 @@ tr.item-row:active td{background:rgba(26,111,196,.14)}
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyMkzBslL2Dy8N0fYIkUGeo_QQ85FZi_1ksob7oGDjFgZe5Wo87QgoSvR2ZLi9vROAu/exec";
 // ═══════════════════════════════════════════════════════
 
-let materiales = [];  // tornillos
-let tuercas    = [];  // tuercas del sheet
-let roldanas   = [];  // roldanas del sheet
+let materiales  = [];  // tornillos
+let tuercas     = [];  // tuercas del sheet
+let roldanas    = [];  // roldanas del sheet
 let listaActiva = [];
-let selMat    = null;
-let selTuerca = null; // tuerca seleccionada (opcional)
-let selRoldana= null; // roldana seleccionada (opcional)
-let cantTuerca = 0;
-let cantRoldana= 0;
+let tabActual   = 'tornillo'; // 'tornillo' o 'tuerca'
+let selMat      = null;
+let selCategoria= 'tornillo'; // qué se seleccionó: 'tornillo' o 'tuerca'
+let selTuerca   = null;
+let selRoldana  = null;
+let cantTuerca  = 0;
+let cantRoldana = 0;
 let tipoMov = '';
 let sortCol = '';
 let sortDir = 1;
@@ -529,6 +527,29 @@ function loadMateriales() {
 
 // ── Filtros en cascada ──────────────────────────────────
 
+// ── Tab Tornillo / Tuerca ──────────────────────────────
+const TIPOS_TORNILLO = [
+  'Tornillo Allen','Tornillo Conico Allen','Tornillo Boton Allen',
+  'Tornillo Boton Cruz','Tornillo Boton Plano','Tornillo Conico Cruz',
+  'Tornillo Conico Plano','Tornillo Hexagonal'
+];
+
+function switchTab(tab) {
+  tabActual = tab;
+  // Update tab buttons
+  document.getElementById('tabTornillo').classList.toggle('active', tab === 'tornillo');
+  document.getElementById('tabTuerca').classList.toggle('active',   tab === 'tuerca');
+  // Reset filters
+  ['filtroTipo','filtroSistema','filtroMedida','filtroMaterial'].forEach(id =>
+    document.getElementById(id).value = '');
+  document.getElementById('searchTorn').value = '';
+  rebuildCascade();
+}
+
+function getDataSource() {
+  return tabActual === 'tuerca' ? tuercas : materiales;
+}
+
 // Devuelve los materiales que pasan los filtros activos
 // ignorarMedida = true cuando necesitamos recalcular qué medidas mostrar
 function filtrarActual(ignorarMedida = false) {
@@ -538,7 +559,7 @@ function filtrarActual(ignorarMedida = false) {
   const mat     = document.getElementById('filtroMaterial').value.trim();
   const texto   = norm(document.getElementById('searchTorn').value);
 
-  return materiales.filter(m => {
+  return getDataSource().filter(m => {
     if (tipo    && norm(m.tipo)    !== norm(tipo))    return false;
     if (sistema && norm(m.sistema) !== norm(sistema)) return false;
     if (medida  && m.medida        !== medida)        return false;
@@ -554,10 +575,23 @@ function filtrarActual(ignorarMedida = false) {
 // Reconstruye los tres selectores dinámicos (Sistema, Medida) desde cero
 function rebuildCascade() {
   const tipo = document.getElementById('filtroTipo').value.trim();
+  const src  = getDataSource();
+
+  // Rebuild tipo dropdown based on current tab
+  const selTipoEl = document.getElementById('filtroTipo');
+  const tipoPrev  = selTipoEl.value;
+  selTipoEl.innerHTML = '<option value="">Todos</option>';
+  const tiposUnicos = [...new Set(src.map(m => m.tipo).filter(Boolean))].sort();
+  tiposUnicos.forEach(t => {
+    const o = document.createElement('option');
+    o.value = t; o.textContent = t;
+    if (t === tipoPrev) o.selected = true;
+    selTipoEl.appendChild(o);
+  });
 
   // Sistemas disponibles para el tipo seleccionado
   const sistemas = [...new Set(
-    materiales
+    src
       .filter(m => !tipo || norm(m.tipo) === norm(tipo))
       .map(m => m.sistema).filter(Boolean)
   )].sort();
@@ -657,6 +691,7 @@ function sortBy(col) {
 
 function selectMat(idx) {
   selMat = listaActiva[idx];
+  selCategoria = tabActual; // remember if tornillo or tuerca
   document.querySelectorAll('.item-row').forEach(r => r.classList.remove('selected'));
   const row = document.getElementById('row' + idx);
   if (row) row.classList.add('selected');
@@ -715,8 +750,13 @@ function goStep3() {
   if (!selMat) return;
   setStep(4);
 
+  const esTuerca = selCategoria === 'tuerca';
+  document.getElementById('tituloPaso4').textContent =
+    esTuerca
+      ? (tipoMov === 'Salida' ? '¿Cuántas tuercas retiras?' : '¿Cuántas tuercas metes?')
+      : (tipoMov === 'Salida' ? '¿Cuántos tornillos retiras?' : '¿Cuántos tornillos metes?');
   document.getElementById('selNombre').textContent =
-    `${selMat.tipo} ${selMat.medida} × ${selMat.largo} — ${selMat.material}`;
+    `${selMat.tipo} ${selMat.medida}${selMat.largo ? ' × ' + selMat.largo : ''} — ${selMat.material}`;
   document.getElementById('selDetalle').textContent =
     `Stock: ${selMat.piezas} piezas · Mínimo: ${selMat.minimo} · Sistema: ${selMat.sistema || '—'}`;
 
@@ -763,14 +803,21 @@ function goStep4() {
   if (!cant || cant <= 0) { e.style.display = 'block'; return; }
   e.style.display = 'none';
   if (tipoMov === 'Salida' && cant > selMat.piezas) { e.textContent = 'Stock insuficiente.'; e.style.display = 'block'; return; }
-  goStep4b();
-  return; // confirm is now in goStep4Confirm
+  if (selCategoria === 'tuerca') {
+    // Tuerca: skip step4b, go directly to confirm
+    cantTuerca = 0; cantRoldana = 0; selTuerca = null; selRoldana = null;
+    goStep4Confirm();
+  } else {
+    // Tornillo: go to step4b for tuerca/roldana options
+    goStep4b();
+  }
+  return;
 }
 
 function goStep4Confirm() {
   const cant = parseInt(document.getElementById('cantidad').value);
   const r = tipoMov === 'Salida' ? selMat.piezas - cant : selMat.piezas + cant;
-  setStep(6); // step5 is position 6
+  setStep(6); // step5 (confirm) is position 6 in STEP_ORDER
   const mot = document.getElementById('motivo').value.trim();
 
   document.getElementById('confirmResumen').innerHTML = `
@@ -909,8 +956,9 @@ async function enviarRetiro() {
   sp.style.display = 'block'; er.style.display = 'none';
 
   const payload = {
-    action:   'registrarMovimiento',
-    tipoMov:  tipoMov,
+    action:    'registrarMovimiento',
+    tipoMov:   tipoMov,
+    categoria: selCategoria,
     nombre:   document.getElementById('nombre').value.trim(),
     tipo:     selMat.tipo,
     medida:   selMat.medida,
@@ -964,6 +1012,7 @@ function resetForm() {
   ['filtroTipo','filtroSistema','filtroMedida','filtroMaterial'].forEach(id =>
     document.getElementById(id).value = '');
   selMat = null; selTuerca = null; selRoldana = null; cantTuerca = 0; cantRoldana = 0;
+  selCategoria = 'tornillo'; tabActual = 'tornillo';
   listaActiva = []; materiales = []; tuercas = []; roldanas = []; tipoMov = '';
   document.querySelectorAll('.mov-btn').forEach(b => b.classList.remove('selected'));
   setStep(1);
