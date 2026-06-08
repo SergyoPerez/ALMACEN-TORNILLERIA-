@@ -312,6 +312,12 @@ tr.item-row.selected td{background:rgba(26,111,196,.12)}
       <button class="tab-btn" id="tabTaper" onclick="switchTab('taperlock')">
         <span class="tab-icon">🔧</span><span class="tab-label">Taper Lock</span>
       </button>
+      <button class="tab-btn" id="tabBalero" onclick="switchTab('balero')">
+        <span class="tab-icon">⚙️</span><span class="tab-label">Balero</span>
+      </button>
+      <button class="tab-btn" id="tabReten" onclick="switchTab('reten')">
+        <span class="tab-icon">🔘</span><span class="tab-label">Retén</span>
+      </button>
     </div>
 
     <!-- Info Taper Lock (solo visible en tab taper) -->
@@ -360,6 +366,38 @@ tr.item-row.selected td{background:rgba(26,111,196,.12)}
         </div>
       </div>
 
+    </div>
+
+    <!-- Info Balero -->
+    <div id="baleroInfo" style="display:none">
+      <div class="taper-img-card" style="display:flex">
+        <img src="balero.png" alt="Balero — medidas O.D., I.D., W" style="background:#f3f4f6">
+        <div class="taper-img-info">
+          <div class="taper-img-title">Balero — Guía de medidas</div>
+          <div class="taper-dim">
+            <strong>O.D.</strong> — Diámetro exterior<br>
+            <strong>I.D.</strong> — Diámetro interior (bore)<br>
+            <strong>W</strong> — Ancho del balero<br>
+            <strong>Serie</strong> — Número de serie (ej. 6205, 6306...)
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Info Retén -->
+    <div id="retenInfo" style="display:none">
+      <div class="taper-img-card" style="display:flex">
+        <img src="reten.png" alt="Retén — medidas Diám. Exterior, Interior, Ancho" style="background:#f3f4f6">
+        <div class="taper-img-info">
+          <div class="taper-img-title">Retén — Guía de medidas</div>
+          <div class="taper-dim">
+            <strong>Diám. Exterior</strong> — Diámetro exterior<br>
+            <strong>Diám. Interior</strong> — Diámetro interior<br>
+            <strong>Ancho</strong> — Grosor del retén<br>
+            <strong>Serie</strong> — Número de serie
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Filtros estándar (tornillo/tuerca/roldana) -->
@@ -427,6 +465,36 @@ tr.item-row.selected td{background:rgba(26,111,196,.12)}
       </div>
     </div>
 
+    <!-- Filtros Balero / Retén -->
+    <div id="filtrosBalRet" style="display:none">
+      <div class="filtros-grid">
+        <div class="filtro-wrap">
+          <span class="filtro-label">Tipo</span>
+          <select id="filtroBalRetTipo" onchange="onBalRetChange()">
+            <option value="">Todos</option>
+          </select>
+        </div>
+        <div class="filtro-wrap">
+          <span class="filtro-label">Sistema</span>
+          <select id="filtroBalRetSistema" onchange="onBalRetChange()">
+            <option value="">Todos</option>
+          </select>
+        </div>
+        <div class="filtro-wrap">
+          <span class="filtro-label" id="labelOD">O.D. (Diám. Ext.)</span>
+          <select id="filtroBalRetOD" onchange="aplicarFiltrosBalRet()">
+            <option value="">Todos</option>
+          </select>
+        </div>
+        <div class="filtro-wrap">
+          <span class="filtro-label" id="labelID">I.D. (Diám. Int.)</span>
+          <select id="filtroBalRetID" onchange="aplicarFiltrosBalRet()">
+            <option value="">Todos</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
     <div class="search-row">
       <input type="text" id="searchTorn" placeholder="Buscar..." autocomplete="off" autocorrect="off" autocapitalize="off">
       <button onclick="buscar()">Buscar</button>
@@ -446,6 +514,21 @@ tr.item-row.selected td{background:rgba(26,111,196,.12)}
         </tr></thead>
         <tbody id="tablaBody">
           <tr><td colspan="6" class="tabla-empty">⚙️ Cargando...</td></tr>
+        </tbody>
+      </table>
+      <!-- Tabla Balero / Retén -->
+      <table id="tablaBalRet" style="display:none">
+        <thead><tr>
+          <th onclick="sortBalRet('tipo')">Tipo <span class="si">↕</span></th>
+          <th onclick="sortBalRet('serie')">Serie <span class="si">↕</span></th>
+          <th onclick="sortBalRet('od')" id="thOD">O.D. <span class="si">↕</span></th>
+          <th onclick="sortBalRet('id')" id="thID">I.D. <span class="si">↕</span></th>
+          <th onclick="sortBalRet('ancho')">Ancho <span class="si">↕</span></th>
+          <th onclick="sortBalRet('piezas')">Piezas <span class="si">↕</span></th>
+          <th onclick="sortBalRet('estado')">Estado <span class="si">↕</span></th>
+        </tr></thead>
+        <tbody id="balRetBody">
+          <tr><td colspan="7" class="tabla-empty">Cargando...</td></tr>
         </tbody>
       </table>
       <!-- Tabla Taper Lock -->
@@ -554,8 +637,13 @@ let tornillos   = [];
 let tuercas     = [];
 let roldanas    = [];
 let taperlocks  = [];
+let baleros     = [];
+let retenes     = [];
 let listaActiva = [];
 let taperActiva = [];
+let balRetActiva= [];
+let sortColBalRet = '';
+let sortDirBalRet = 1;
 let tabActual   = 'tornillo';
 let selMat      = null;
 let selCategoria= 'tornillo';
@@ -620,6 +708,8 @@ function loadMateriales() {
       tuercas    = limpia(data.tuercas    || []);
       roldanas   = limpia(data.roldanas   || []);
       taperlocks = limpia(data.taperlocks || []);
+      baleros    = limpia(data.baleros    || []);
+      retenes    = limpia(data.retenes    || []);
       rebuildCascade();
     })
     .catch(() => {
@@ -632,26 +722,49 @@ function loadMateriales() {
 // ── Tabs ──────────────────────────────────────────────
 function switchTab(tab) {
   tabActual = tab;
-  ['tornillo','tuerca','roldana','taperlock'].forEach(t => {
-    document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1))?.classList.remove('active');
+  ['tornillo','tuerca','roldana','taperlock','balero','reten'].forEach(t => {
+    const id = {tornillo:'tabTornillo',tuerca:'tabTuerca',roldana:'tabRoldana',taperlock:'tabTaper',balero:'tabBalero',reten:'tabReten'}[t];
+    document.getElementById(id)?.classList.remove('active');
   });
-  const tabMap = {tornillo:'tabTornillo',tuerca:'tabTuerca',roldana:'tabRoldana',taperlock:'tabTaper'};
+  const tabMap = {tornillo:'tabTornillo',tuerca:'tabTuerca',roldana:'tabRoldana',taperlock:'tabTaper',balero:'tabBalero',reten:'tabReten'};
   document.getElementById(tabMap[tab])?.classList.add('active');
 
-  const esTaper = tab === 'taperlock';
-  document.getElementById('taperInfo').style.display        = esTaper ? 'block' : 'none';
-  document.getElementById('filtrosEstandar').style.display  = esTaper ? 'none' : 'block';
-  document.getElementById('filtrosTaper').style.display     = esTaper ? 'block' : 'none';
-  document.getElementById('tablaEstandar').style.display    = esTaper ? 'none' : '';
-  document.getElementById('tablaTaper').style.display       = esTaper ? '' : 'none';
+  const esTaper  = tab === 'taperlock';
+  const esBalRet = tab === 'balero' || tab === 'reten';
+  const esStd    = !esTaper && !esBalRet;
+
+  document.getElementById('taperInfo').style.display       = esTaper  ? 'block' : 'none';
+  document.getElementById('baleroInfo').style.display      = tab==='balero' ? 'block' : 'none';
+  document.getElementById('retenInfo').style.display       = tab==='reten'  ? 'block' : 'none';
+  document.getElementById('filtrosEstandar').style.display = esStd    ? 'block' : 'none';
+  document.getElementById('filtrosTaper').style.display    = esTaper  ? 'block' : 'none';
+  document.getElementById('filtrosBalRet').style.display   = esBalRet ? 'block' : 'none';
+  document.getElementById('tablaEstandar').style.display   = esStd    ? ''      : 'none';
+  document.getElementById('tablaTaper').style.display      = esTaper  ? ''      : 'none';
+  document.getElementById('tablaBalRet').style.display     = esBalRet ? ''      : 'none';
+
+  // Update OD/ID labels for reten
+  if (tab === 'reten') {
+    document.getElementById('labelOD').textContent = 'Diám. Exterior';
+    document.getElementById('labelID').textContent = 'Diám. Interior';
+    document.getElementById('thOD').innerHTML = 'Diám. Ext. <span class="si">↕</span>';
+    document.getElementById('thID').innerHTML = 'Diám. Int. <span class="si">↕</span>';
+  } else {
+    document.getElementById('labelOD').textContent = 'O.D. (Diám. Ext.)';
+    document.getElementById('labelID').textContent = 'I.D. (Diám. Int.)';
+    document.getElementById('thOD').innerHTML = 'O.D. <span class="si">↕</span>';
+    document.getElementById('thID').innerHTML = 'I.D. <span class="si">↕</span>';
+  }
 
   ['filtroTipo','filtroSistema','filtroMedida','filtroMaterial',
-   'filtroTaperTipo','filtroTaperSerie','filtroTaperBore','filtroTaperCunero']
-    .forEach(id => document.getElementById(id) && (document.getElementById(id).value = ''));
+   'filtroTaperTipo','filtroTaperSerie','filtroTaperBore','filtroTaperCunero',
+   'filtroBalRetTipo','filtroBalRetSistema','filtroBalRetOD','filtroBalRetID']
+    .forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
   document.getElementById('searchTorn').value = '';
 
-  if (esTaper) { buildTaperFiltros(); updateTaperImage(); }
-  else         rebuildCascade();
+  if (esTaper)  { buildTaperFiltros(); updateTaperImage(); }
+  else if (esBalRet) buildBalRetFiltros();
+  else          rebuildCascade();
 }
 
 function getDataSource() {
@@ -935,15 +1048,20 @@ function irACantidad() {
   if (!selMat) return;
   setStep(4);
 
-  const esTaper = selCategoria === 'taperlock';
+  const esTaper  = selCategoria === 'taperlock';
+  const esBalRet = selCategoria === 'balero' || selCategoria === 'reten';
   let nombreStr, detalleStr;
 
   if (esTaper) {
-    nombreStr = `${selMat.tipo} Serie ${selMat.serie} — Bore ${selMat.bore}`;
-    detalleStr= `Largo: ${selMat.largo||'—'} · Cuñero: ${selMat.cuñero||'—'} · Material: ${selMat.material||'—'}`;
+    nombreStr  = `${selMat.tipo} Serie ${selMat.serie} — Bore ${selMat.bore}`;
+    detalleStr = `Largo: ${selMat.largo||'—'} · Cuñero: ${selMat.cuñero||'—'} · Material: ${selMat.material||'—'}`;
+  } else if (esBalRet) {
+    const cat  = selCategoria === 'balero' ? 'Balero' : 'Retén';
+    nombreStr  = `${cat} ${selMat.tipo||''} Serie ${selMat.serie||'—'}`;
+    detalleStr = `O.D.: ${selMat.od||'—'} · I.D.: ${selMat.id||'—'} · Ancho: ${selMat.ancho||'—'} · ${selMat.sistema||''}`;
   } else {
-    nombreStr = `${selMat.tipo} ${selMat.medida}${selMat.largo?' × '+selMat.largo:''} — ${selMat.material}`;
-    detalleStr= `Stock: ${selMat.piezas} pzas · Mínimo: ${selMat.minimo} · ${selMat.sistema||''}`;
+    nombreStr  = `${selMat.tipo} ${selMat.medida}${selMat.largo?' × '+selMat.largo:''} — ${selMat.material}`;
+    detalleStr = `Stock: ${selMat.piezas} pzas · Mínimo: ${selMat.minimo} · ${selMat.sistema||''}`;
   }
 
   document.getElementById('tituloCantidad').textContent =
@@ -984,7 +1102,7 @@ function goStep5() {
     e.textContent='Stock insuficiente.'; e.style.display='block'; return;
   }
 
-  // Si es tuerca, roldana o taperlock → saltar paso 5, ir directo a confirmar
+  // Si NO es tornillo → saltar paso 5, ir directo a confirmar
   if (selCategoria !== 'tornillo') {
     selTuerca=null; selRoldana=null; cantTuerca=0; cantRoldana=0;
     goStep6();
@@ -1122,6 +1240,11 @@ async function enviarRetiro() {
     motivo:    document.getElementById('motivo').value.trim(),
     fila:      selMat.fila,
     lugar:     selMat.lugar || '',
+    // Balero/Reten fields
+    od:        selMat.od    || '',
+    id:        selMat.id    || '',
+    ancho:     selMat.ancho || '',
+    // Tornillo extras
     tuerca:    selTuerca&&cantTuerca>0 ? {...selTuerca, cantidad:cantTuerca}  : null,
     roldana:   selRoldana&&cantRoldana>0 ? {...selRoldana, cantidad:cantRoldana} : null,
   };
@@ -1152,6 +1275,131 @@ function showSuccess(payload, data) {
     <div class="confirm-row"><span class="confirm-label">Stock restante</span><span class="confirm-value">${data.stockRestante} piezas</span></div>`;
 }
 
+// ── Baleros / Retenes ──────────────────────────────────
+function getBalRetSource() {
+  return tabActual === 'reten' ? retenes : baleros;
+}
+
+function buildBalRetFiltros() {
+  const src = getBalRetSource();
+  // Tipos
+  const selTipo = document.getElementById('filtroBalRetTipo');
+  const tipoPrev = selTipo.value;
+  selTipo.innerHTML = '<option value="">Todos</option>';
+  [...new Set(src.map(m=>m.tipo).filter(Boolean))].sort().forEach(t => {
+    const o=document.createElement('option'); o.value=t; o.textContent=t;
+    if(t===tipoPrev) o.selected=true; selTipo.appendChild(o);
+  });
+  // Sistemas
+  const selSist = document.getElementById('filtroBalRetSistema');
+  const sistPrev = selSist.value;
+  selSist.innerHTML = '<option value="">Todos</option>';
+  [...new Set(src.map(m=>m.sistema).filter(Boolean))].sort().forEach(s => {
+    const o=document.createElement('option'); o.value=s; o.textContent=s;
+    if(s===sistPrev) o.selected=true; selSist.appendChild(o);
+  });
+  aplicarFiltrosBalRet();
+}
+
+function onBalRetChange() {
+  const src    = getBalRetSource();
+  const tipo   = document.getElementById('filtroBalRetTipo').value;
+  const sist   = document.getElementById('filtroBalRetSistema').value;
+
+  // OD
+  const selOD = document.getElementById('filtroBalRetOD');
+  const odPrev = selOD.value;
+  const ods = [...new Set(
+    src.filter(m=>(!tipo||norm(m.tipo)===norm(tipo))&&(!sist||norm(m.sistema)===norm(sist)))
+      .map(m=>m.od).filter(Boolean)
+  )].sort((a,b)=>toNum(a)-toNum(b));
+  selOD.innerHTML='<option value="">Todos</option>';
+  ods.forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v;
+    if(v===odPrev)o.selected=true;selOD.appendChild(o);});
+  if(odPrev&&!ods.includes(odPrev)) selOD.value='';
+
+  // ID
+  const selID = document.getElementById('filtroBalRetID');
+  const idPrev = selID.value;
+  const ids = [...new Set(
+    src.filter(m=>(!tipo||norm(m.tipo)===norm(tipo))&&(!sist||norm(m.sistema)===norm(sist)))
+      .map(m=>m.id).filter(Boolean)
+  )].sort((a,b)=>toNum(a)-toNum(b));
+  selID.innerHTML='<option value="">Todos</option>';
+  ids.forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v;
+    if(v===idPrev)o.selected=true;selID.appendChild(o);});
+  if(idPrev&&!ids.includes(idPrev)) selID.value='';
+
+  aplicarFiltrosBalRet();
+}
+
+function aplicarFiltrosBalRet() {
+  const src   = getBalRetSource();
+  const tipo  = document.getElementById('filtroBalRetTipo').value;
+  const sist  = document.getElementById('filtroBalRetSistema').value;
+  const od    = document.getElementById('filtroBalRetOD').value;
+  const id    = document.getElementById('filtroBalRetID').value;
+  const texto = norm(document.getElementById('searchTorn').value);
+
+  let lista = src.filter(m => {
+    if (tipo && norm(m.tipo)   !== norm(tipo)) return false;
+    if (sist && norm(m.sistema)!== norm(sist)) return false;
+    if (od   && m.od           !== od)         return false;
+    if (id   && m.id           !== id)         return false;
+    if (texto) {
+      const h = norm([m.tipo,m.serie,m.od,m.id,m.ancho,m.sistema,m.material].join(' '));
+      if (!texto.split(/\s+/).every(p=>h.includes(p))) return false;
+    }
+    return true;
+  });
+
+  if (sortColBalRet) {
+    lista = [...lista].sort((a,b) => {
+      let va=a[sortColBalRet]??'', vb=b[sortColBalRet]??'';
+      if(typeof va==='number') return (va-vb)*sortDirBalRet;
+      const d=toNum(va)-toNum(vb);
+      return d!==0?d*sortDirBalRet:String(va).localeCompare(String(vb))*sortDirBalRet;
+    });
+  }
+
+  balRetActiva = lista;
+  renderBalRet(lista);
+}
+
+function renderBalRet(list) {
+  const body = document.getElementById('balRetBody');
+  const n = list.length;
+  document.getElementById('tablaCount').textContent =
+    `${n} pieza${n!==1?'s':''} encontrada${n!==1?'s':''}`;
+  if (!n) { body.innerHTML='<tr><td colspan="7" class="tabla-empty">Sin resultados</td></tr>'; return; }
+  body.innerHTML = list.map((m,i)=>`
+    <tr class="item-row" id="br${i}" onclick="selectBalRet(${i})">
+      <td>${m.tipo||'—'}</td>
+      <td><strong>${m.serie||'—'}</strong></td>
+      <td>${m.od||'—'}</td>
+      <td>${m.id||'—'}</td>
+      <td>${m.ancho||'—'}</td>
+      <td style="font-family:'DM Mono',monospace;font-weight:600">${m.piezas}</td>
+      <td>${estadoBadge(m.piezas)}</td>
+    </tr>`).join('');
+}
+
+function sortBalRet(col) {
+  sortDirBalRet = sortColBalRet===col ? -sortDirBalRet : 1;
+  sortColBalRet = col;
+  document.querySelectorAll('#tablaBalRet th').forEach(th=>th.classList.remove('sorted'));
+  event.currentTarget.classList.add('sorted');
+  aplicarFiltrosBalRet();
+}
+
+function selectBalRet(idx) {
+  selMat = balRetActiva[idx];
+  selCategoria = tabActual; // 'balero' o 'reten'
+  document.querySelectorAll('.item-row').forEach(r=>r.classList.remove('selected'));
+  document.getElementById('br'+idx)?.classList.add('selected');
+  setTimeout(()=>irACantidad(), 200);
+}
+
 function resetForm() {
   document.getElementById('mainFlow').style.display='block';
   document.getElementById('successScreen').classList.remove('active');
@@ -1163,10 +1411,10 @@ function resetForm() {
   document.querySelectorAll('.mov-btn').forEach(b=>b.classList.remove('selected'));
   selMat=null; selCategoria='tornillo'; selTuerca=null; selRoldana=null;
   cantTuerca=0; cantRoldana=0; tipoMov=''; tabActual='tornillo';
-  tornillos=[]; tuercas=[]; roldanas=[]; taperlocks=[];
+  tornillos=[]; tuercas=[]; roldanas=[]; taperlocks=[]; baleros=[]; retenes=[]; balRetActiva=[];
   listaActiva=[]; taperActiva=[];
   // Reset tabs visual
-  ['tabTornillo','tabTuerca','tabRoldana','tabTaper'].forEach(id => {
+  ['tabTornillo','tabTuerca','tabRoldana','tabTaper','tabBalero','tabReten'].forEach(id => {
     document.getElementById(id)?.classList.remove('active');
   });
   document.getElementById('tabTornillo')?.classList.add('active');
