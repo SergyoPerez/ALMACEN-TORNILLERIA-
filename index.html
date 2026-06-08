@@ -3,21 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Maquinados Express CNC — Tornillería</title>
+<title>Maquinados Express CNC — Almacén</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0a0e17">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Tornillería">
+<meta name="apple-mobile-web-app-title" content="Almacén">
 <link rel="apple-touch-icon" href="icon-192.png">
 <style>
-:root {
-  --bg:#0a0e17; --surface:#111827; --surface2:#1a2235;
-  --border:#1e3a5f; --accent:#1a6fc4; --accent2:#0e4d8f;
-  --accent-light:#4da3f5; --green:#22c55e; --red:#ef4444;
-  --amber:#f59e0b; --text:#e8edf5; --text2:#8b9ab5; --text3:#3d5070;
-  --radius:16px; --radius-sm:10px;
+:root{
+  --bg:#0a0e17;--surface:#111827;--surface2:#1a2235;
+  --border:#1e3a5f;--accent:#1a6fc4;--accent2:#0e4d8f;
+  --accent-light:#4da3f5;--green:#22c55e;--red:#ef4444;
+  --amber:#f59e0b;--text:#e8edf5;--text2:#8b9ab5;--text3:#3d5070;
+  --radius:16px;--radius-sm:10px;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);
@@ -25,8 +25,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);
 body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   background-image:
     radial-gradient(circle at 15% 15%,rgba(26,111,196,.1) 0%,transparent 45%),
-    radial-gradient(circle at 85% 85%,rgba(26,111,196,.07) 0%,transparent 45%),
-    url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%231a6fc4' fill-opacity='0.03'%3E%3Ccircle cx='40' cy='40' r='6'/%3E%3Ccircle cx='40' cy='40' r='15' stroke='%231a6fc4' stroke-opacity='0.03' stroke-width='1.5' fill='none'/%3E%3Crect x='37' y='20' width='6' height='8' rx='1'/%3E%3Crect x='37' y='52' width='6' height='8' rx='1'/%3E%3Crect x='20' y='37' width='8' height='6' rx='1'/%3E%3Crect x='52' y='37' width='8' height='6' rx='1'/%3E%3C/g%3E%3C/svg%3E")}
+    radial-gradient(circle at 85% 85%,rgba(26,111,196,.07) 0%,transparent 45%)}
 
 /* Header */
 .header{width:100%;position:sticky;top:0;z-index:20;
@@ -37,7 +36,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   display:flex;align-items:center;justify-content:center;
   box-shadow:0 0 0 2px rgba(26,111,196,.5),0 4px 16px rgba(0,0,0,.5);overflow:hidden}
 .brand-logo-inner{width:42px;height:42px;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.logo-m{font-size:18px;font-weight:900;color:#1a6fc4;font-family:'DM Sans',sans-serif;line-height:1;letter-spacing:-1px}
+.logo-m{font-size:18px;font-weight:900;color:#1a6fc4;line-height:1;letter-spacing:-1px}
 .logo-express{font-size:5.5px;font-weight:700;color:#fff;background:#1a6fc4;
   padding:1px 4px;border-radius:2px;letter-spacing:.5px;margin-top:1px}
 .logo-cnc{font-size:6px;font-weight:600;color:#1a6fc4;letter-spacing:1px;margin-top:1px}
@@ -46,7 +45,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .brand-name span{color:var(--accent-light)}
 .brand-sa{font-size:11px;color:var(--text2);font-weight:500}
 .brand-tagline{font-size:10px;color:var(--text3);font-style:italic;margin-top:2px}
-.header-sub{padding:8px 20px 10px;display:flex;align-items:center;gap:8px}
+.header-sub{padding:8px 20px 10px}
 .header-sub p{font-size:12px;color:var(--text2)}
 
 /* Container */
@@ -54,9 +53,9 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 
 /* Steps */
 .steps{display:flex;align-items:center;margin-bottom:24px}
-.step-dot{width:28px;height:28px;border-radius:50%;background:var(--surface2);
+.step-dot{width:26px;height:26px;border-radius:50%;background:var(--surface2);
   border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;
-  font-size:12px;font-weight:600;color:var(--text3);transition:all .3s;flex-shrink:0}
+  font-size:11px;font-weight:600;color:var(--text3);transition:all .3s;flex-shrink:0}
 .step-dot.active{background:var(--accent);border-color:var(--accent-light);color:#fff;
   box-shadow:0 0 14px rgba(26,111,196,.5)}
 .step-dot.done{background:var(--green);border-color:var(--green);color:#fff}
@@ -77,76 +76,112 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 /* Inputs */
 input,select{width:100%;background:var(--surface2);border:1.5px solid var(--border);
   border-radius:var(--radius-sm);color:var(--text);font-family:'DM Sans',sans-serif;
-  font-size:16px;padding:14px 16px;outline:none;transition:border-color .2s,box-shadow .2s;
-  -webkit-appearance:none;appearance:none}
+  font-size:16px;padding:14px 16px;outline:none;
+  transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;appearance:none}
 input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,111,196,.15)}
 input::placeholder{color:var(--text3)}
+
+/* Tabs */
+.tab-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.tab-btn{flex:1;min-width:100px;padding:10px 8px;border:1.5px solid var(--border);
+  border-radius:var(--radius-sm);background:var(--surface2);color:var(--text2);
+  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;
+  display:flex;flex-direction:column;align-items:center;gap:3px}
+.tab-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;
+  box-shadow:0 2px 12px rgba(26,111,196,.4)}
+.tab-btn .tab-icon{font-size:18px}
+.tab-btn .tab-label{font-size:11px}
 
 /* Filtros */
 .filtros-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
 .filtro-wrap{display:flex;flex-direction:column;gap:5px}
 .filtro-label{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.7px}
 .filtro-wrap select{font-size:14px;padding:10px 14px}
-.filtro-wrap select:disabled{opacity:.4;cursor:not-allowed}
+
+/* TaperLock image */
+.taper-img-card{background:var(--surface2);border:1px solid var(--border);
+  border-radius:var(--radius-sm);padding:12px;margin-bottom:14px;
+  display:flex;gap:12px;align-items:center}
+.taper-img-card img{width:130px;height:100px;object-fit:contain;border-radius:6px;
+  background:#fff;flex-shrink:0;padding:6px}
+.taper-img-info{flex:1}
+.taper-img-title{font-size:12px;font-weight:700;color:var(--accent-light);margin-bottom:4px}
+.taper-dim{font-size:11px;color:var(--text2);line-height:1.8}
+.taper-dim strong{color:var(--text);font-family:'DM Mono',monospace}
 
 .search-row{display:flex;gap:8px;margin-bottom:14px}
 .search-row input{flex:1;font-size:14px;padding:10px 14px}
 .search-row button{background:var(--accent);border:none;border-radius:var(--radius-sm);
   color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;
-  padding:0 18px;cursor:pointer;flex-shrink:0;transition:background .15s}
-.search-row button:active{background:var(--accent2)}
-
-/* Divider */
-.divider{display:flex;align-items:center;gap:10px;margin:6px 0 14px}
-.divider span{font-size:10px;color:var(--text3);white-space:nowrap;font-weight:600;
-  text-transform:uppercase;letter-spacing:.5px}
-.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+  padding:0 18px;cursor:pointer;flex-shrink:0}
 
 /* Tabla */
 .tabla-wrap{overflow-x:auto;border-radius:var(--radius-sm);border:1px solid var(--border);
-  margin-bottom:14px;box-shadow:0 2px 16px rgba(0,0,0,.25)}
-table{width:100%;border-collapse:collapse;min-width:480px}
+  margin-bottom:14px}
+table{width:100%;border-collapse:collapse;min-width:420px}
 thead tr{background:linear-gradient(90deg,#0b1929,#112240)}
-th{padding:10px 12px;text-align:left;font-size:10px;font-weight:700;color:var(--accent-light);
+th{padding:9px 10px;text-align:left;font-size:10px;font-weight:700;color:var(--accent-light);
   text-transform:uppercase;letter-spacing:.7px;border-bottom:1px solid var(--border);
   white-space:nowrap;cursor:pointer;user-select:none}
 th:hover{color:#fff}
-th .si{margin-left:4px;opacity:.35;font-size:11px}
-th.sorted .si{opacity:1;color:var(--accent-light)}
-td{padding:11px 12px;font-size:13px;border-bottom:1px solid rgba(30,58,95,.4)}
+th .si{margin-left:3px;opacity:.35;font-size:10px}
+th.sorted .si{opacity:1}
+td{padding:10px;font-size:13px;border-bottom:1px solid rgba(30,58,95,.4)}
 tr:last-child td{border-bottom:none}
-tr.selected td{background:rgba(26,111,196,.1)}
 tr.item-row{cursor:pointer;transition:background .1s}
 tr.item-row:hover td{background:rgba(26,111,196,.06)}
-tr.item-row:active td{background:rgba(26,111,196,.14)}
+tr.item-row.selected td{background:rgba(26,111,196,.12)}
 
-.badge{display:inline-block;padding:3px 8px;border-radius:6px;
+.badge{display:inline-block;padding:2px 7px;border-radius:5px;
   font-size:11px;font-weight:700;font-family:'DM Mono',monospace;white-space:nowrap}
 .badge-ok{background:rgba(34,197,94,.12);color:#4ade80}
 .badge-low{background:rgba(245,158,11,.12);color:#fbbf24}
 .badge-crit{background:rgba(239,68,68,.12);color:#f87171}
 
-.ti{margin-right:5px;font-size:14px}
 .tabla-empty{text-align:center;padding:30px;color:var(--text2);font-size:14px}
 .tabla-count{font-size:12px;color:var(--text3);margin-bottom:8px;font-weight:500}
 
-/* Selected */
+/* Sel card + lugar */
 .sel-card{background:rgba(26,111,196,.07);border:1.5px solid rgba(26,111,196,.3);
-  border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:14px;display:none}
-.sel-card.active{display:block}
+  border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:14px}
 .sel-title{font-size:14px;font-weight:600;margin-bottom:4px}
 .sel-detail{font-size:12px;color:var(--text2)}
-
 .lugar-card{display:none;align-items:center;gap:10px;margin-bottom:14px;
   background:rgba(26,111,196,.07);border:1.5px solid rgba(26,111,196,.3);
   border-radius:var(--radius-sm);padding:12px 16px}
-.lugar-card.active{display:flex}
+.lugar-card.show{display:flex}
 .lugar-label{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;
   letter-spacing:.7px;margin-bottom:2px}
-.lugar-val{font-size:22px;font-weight:700;color:var(--accent-light);
+.lugar-val{font-size:24px;font-weight:700;color:var(--accent-light);
   font-family:'DM Mono',monospace;line-height:1}
 
-.qty-row{display:flex;gap:10px;margin-bottom:14px}
+/* Acc items (tuerca/roldana) */
+.acc-item{background:var(--surface2);border:1.5px solid var(--border);
+  border-radius:var(--radius-sm);padding:12px 14px;cursor:pointer;transition:all .15s;margin-bottom:6px}
+.acc-item:hover{border-color:var(--accent)}
+.acc-item.selected{border-color:var(--accent);background:rgba(26,111,196,.12)}
+
+/* Buttons */
+.btn{width:100%;padding:15px;border:none;border-radius:var(--radius-sm);
+  font-family:'DM Sans',sans-serif;font-size:16px;font-weight:700;cursor:pointer;
+  transition:all .15s;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;
+  box-shadow:0 4px 18px rgba(26,111,196,.45)}
+.btn:disabled{opacity:.4;pointer-events:none}
+.btn-secondary{background:var(--surface2);border:1.5px solid var(--border);color:var(--text2)}
+
+/* Mov buttons */
+.mov-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:4px}
+.mov-btn{background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--radius);
+  padding:20px 12px;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;
+  align-items:center;gap:8px;color:var(--text)}
+.mov-btn:hover{border-color:var(--accent);background:rgba(26,111,196,.08)}
+.mov-btn.selected{border-color:var(--accent);background:rgba(26,111,196,.12);
+  box-shadow:0 0 0 2px rgba(26,111,196,.3)}
+.mov-btn .mov-icon{font-size:32px}
+.mov-btn .mov-label{font-size:14px;font-weight:700}
+.mov-btn .mov-desc{font-size:11px;color:var(--text2);text-align:center}
 
 /* Confirm */
 .confirm-card{background:var(--surface2);border:1px solid var(--border);
@@ -164,15 +199,6 @@ tr.item-row:active td{background:rgba(26,111,196,.14)}
 .alert-danger{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3);color:#f87171}
 .alert-info{background:rgba(26,111,196,.08);border:1px solid rgba(26,111,196,.3);color:#93c5fd}
 
-/* Buttons */
-.btn{width:100%;padding:16px;border:none;border-radius:var(--radius-sm);
-  font-family:'DM Sans',sans-serif;font-size:16px;font-weight:700;cursor:pointer;
-  transition:all .15s;display:flex;align-items:center;justify-content:center;gap:8px}
-.btn:active{transform:scale(.97)}
-.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;
-  box-shadow:0 4px 18px rgba(26,111,196,.45)}
-.btn:disabled{opacity:.4;pointer-events:none}
-
 .back-link{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text2);
   cursor:pointer;margin-bottom:16px;width:fit-content}
 .back-link:hover{color:var(--accent-light)}
@@ -187,28 +213,12 @@ tr.item-row:active td{background:rgba(26,111,196,.14)}
 .success-screen.active{display:flex;animation:slideIn .3s ease}
 .success-icon{width:80px;height:80px;border-radius:50%;background:rgba(34,197,94,.12);
   border:2px solid var(--green);display:flex;align-items:center;justify-content:center;
-  font-size:36px;margin-bottom:20px;animation:popIn .4s cubic-bezier(.175,.885,.32,1.275);
+  font-size:36px;margin-bottom:20px;
+  animation:popIn .4s cubic-bezier(.175,.885,.32,1.275);
   box-shadow:0 0 30px rgba(34,197,94,.2)}
 @keyframes popIn{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
 .success-title{font-size:24px;font-weight:700;margin-bottom:8px}
 .success-sub{font-size:14px;color:var(--text2);margin-bottom:32px;line-height:1.6}
-.mov-btn{background:var(--surface2);border:1.5px solid var(--border);
-  border-radius:var(--radius);padding:20px;cursor:pointer;transition:all .2s;
-  display:flex;flex-direction:column;align-items:center;color:var(--text);width:100%}
-.mov-btn:hover{border-color:var(--accent);background:rgba(26,111,196,.08)}
-.tab-row{display:flex;gap:8px;margin-bottom:14px}
-.tab-btn{flex:1;padding:10px;border:1.5px solid var(--border);border-radius:var(--radius-sm);
-  background:var(--surface2);color:var(--text2);font-family:'DM Sans',sans-serif;
-  font-size:14px;font-weight:600;cursor:pointer;transition:all .2s}
-.tab-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;
-  box-shadow:0 2px 12px rgba(26,111,196,.4)}
-.mov-btn.selected{border-color:var(--accent);background:rgba(26,111,196,.12);
-  box-shadow:0 0 0 2px rgba(26,111,196,.3)}
-.acc-item{background:var(--surface2);border:1.5px solid var(--border);
-  border-radius:var(--radius-sm);padding:12px 14px;cursor:pointer;transition:all .15s}
-.acc-item:hover{border-color:var(--accent);background:rgba(26,111,196,.06)}
-.acc-item.selected{border-color:var(--accent);background:rgba(26,111,196,.12);
-  box-shadow:0 0 0 2px rgba(26,111,196,.25)}
 .success-detail{background:var(--surface);border:1px solid var(--border);
   border-radius:var(--radius);padding:16px 20px;width:100%;text-align:left;margin-bottom:24px}
 </style>
@@ -229,15 +239,16 @@ tr.item-row:active td{background:rgba(26,111,196,.14)}
       <div class="brand-sa">S.A. de C.V.</div>
       <div class="brand-tagline">"Tan pronto como sea posible"</div>
     </div>
-    <div style="font-size:24px;opacity:.6">🔩</div>
+    <div style="font-size:24px;opacity:.6">⚙️</div>
   </div>
   <div class="header-sub">
-    <p>⚙️ &nbsp;Control de tornillería y tuercas</p>
+    <p>🔩 Control de almacén — Tornillos · Tuercas · Roldanas · Taper Lock</p>
   </div>
 </div>
 
 <div class="container" id="mainFlow">
 
+  <!-- Steps -->
   <div class="steps" style="margin-top:20px">
     <div class="step-dot active" id="dot1">1</div>
     <div class="step-line" id="line1"></div>
@@ -247,104 +258,209 @@ tr.item-row:active td{background:rgba(26,111,196,.14)}
     <div class="step-line" id="line3"></div>
     <div class="step-dot" id="dot4">4</div>
     <div class="step-line" id="line4"></div>
-    <div class="step-dot" id="dot4b">5</div>
-    <div class="step-line" id="line4b"></div>
-    <div class="step-dot" id="dot5">6</div>
+    <div class="step-dot" id="dot5">5</div>
+    <div class="step-line" id="line5"></div>
+    <div class="step-dot" id="dot6">6</div>
   </div>
 
-  <!-- PASO 1 -->
+  <!-- PASO 1: Nombre -->
   <div class="card active" id="step1">
-    <div class="card-label">Paso 1 de 4</div>
-    <div class="card-title">¿Quién realiza el retiro?</div>
+    <div class="card-label">Paso 1 de 6</div>
+    <div class="card-title">¿Quién realiza el movimiento?</div>
     <input type="text" id="nombre" placeholder="Tu nombre completo" autocomplete="name" autocapitalize="words">
     <div class="error-msg" id="err1">Escribe tu nombre para continuar.</div>
     <br>
     <button class="btn btn-primary" onclick="goStep2()">Continuar →</button>
   </div>
 
-  <!-- PASO 2: Tipo de movimiento -->
+  <!-- PASO 2: Retirar o Meter -->
   <div class="card" id="step2">
     <div class="back-link" onclick="goBack(1)">← Volver</div>
-    <div class="card-label">Paso 2 de 5</div>
+    <div class="card-label">Paso 2 de 6</div>
     <div class="card-title">¿Qué vas a hacer?</div>
-    <div style="display:flex;flex-direction:column;gap:12px">
-      <button onclick="seleccionarMov('Salida')" class="mov-btn" id="btnSalida">
-        <div style="font-size:28px;margin-bottom:6px">📤</div>
-        <div style="font-size:16px;font-weight:700">Retirar material</div>
-        <div style="font-size:12px;color:var(--text2);margin-top:2px">Descuenta del inventario</div>
+    <div class="mov-grid">
+      <button class="mov-btn" id="btnSalida" onclick="seleccionarMov('Salida')">
+        <div class="mov-icon">📤</div>
+        <div class="mov-label">Retirar</div>
+        <div class="mov-desc">Descuenta del inventario</div>
       </button>
-      <button onclick="seleccionarMov('Entrada')" class="mov-btn" id="btnEntrada">
-        <div style="font-size:28px;margin-bottom:6px">📥</div>
-        <div style="font-size:16px;font-weight:700">Meter material</div>
-        <div style="font-size:12px;color:var(--text2);margin-top:2px">Suma al inventario</div>
+      <button class="mov-btn" id="btnEntrada" onclick="seleccionarMov('Entrada')">
+        <div class="mov-icon">📥</div>
+        <div class="mov-label">Meter</div>
+        <div class="mov-desc">Suma al inventario</div>
       </button>
     </div>
-    <div class="error-msg" id="err2">Selecciona una opción para continuar.</div>
+    <div class="error-msg" id="err2">Selecciona una opción.</div>
   </div>
 
-  <!-- PASO 3: Material -->
+  <!-- PASO 3: Qué buscar -->
   <div class="card" id="step3">
     <div class="back-link" onclick="goBack(2)">← Volver</div>
     <div class="card-label">Paso 3 de 6</div>
-    <div class="card-title">¿Qué pieza retiras?</div>
+    <div class="card-title">¿Qué pieza necesitas?</div>
 
-    <!-- Tabs Tornillo / Tuerca -->
     <div class="tab-row">
-      <button class="tab-btn active" id="tabTornillo" onclick="switchTab('tornillo')">🔩 Tornillo</button>
-      <button class="tab-btn" id="tabTuerca" onclick="switchTab('tuerca')">◉ Tuerca</button>
+      <button class="tab-btn active" id="tabTornillo" onclick="switchTab('tornillo')">
+        <span class="tab-icon">🔩</span><span class="tab-label">Tornillo</span>
+      </button>
+      <button class="tab-btn" id="tabTuerca" onclick="switchTab('tuerca')">
+        <span class="tab-icon">◉</span><span class="tab-label">Tuerca</span>
+      </button>
+      <button class="tab-btn" id="tabRoldana" onclick="switchTab('roldana')">
+        <span class="tab-icon">⭕</span><span class="tab-label">Roldana</span>
+      </button>
+      <button class="tab-btn" id="tabTaper" onclick="switchTab('taperlock')">
+        <span class="tab-icon">🔧</span><span class="tab-label">Taper Lock</span>
+      </button>
     </div>
 
-    <!-- Filtros -->
-    <div class="filtros-grid">
-      <div class="filtro-wrap">
-        <span class="filtro-label">Tipo</span>
-        <select id="filtroTipo" onchange="onTipoChange()">
-          <option value="">Todos</option>
-        </select>
+    <!-- Info Taper Lock (solo visible en tab taper) -->
+    <div id="taperInfo" style="display:none">
+
+      <!-- Imagen Taper Lock Cónico -->
+      <div id="imgConico" class="taper-img-card" style="display:none">
+        <img src="taper_conico.png" alt="Taper Lock Cónico — medidas L, d, D">
+        <div class="taper-img-info">
+          <div class="taper-img-title">Taper Lock Cónico — Guía de medidas</div>
+          <div class="taper-dim">
+            <strong>L</strong> — Largo total del buje<br>
+            <strong>D</strong> — Diámetro exterior<br>
+            <strong>d</strong> — Diámetro del bore (agujero)<br>
+            <strong>Cuñero</strong> — Con o sin ranura de cuña
+          </div>
+        </div>
       </div>
-      <div class="filtro-wrap">
-        <span class="filtro-label">Sistema</span>
-        <select id="filtroSistema" onchange="onSistemaChange()">
-          <option value="">Todos</option>
-        </select>
+
+      <!-- Imagen Taper Lock Bushing -->
+      <div id="imgBushing" class="taper-img-card" style="display:none">
+        <img src="taper_bushing.png" alt="Taper Lock Bushing — medidas L, A, D">
+        <div class="taper-img-info">
+          <div class="taper-img-title">Taper Lock Bushing — Guía de medidas</div>
+          <div class="taper-dim">
+            <strong>L</strong> — Largo total<br>
+            <strong>D</strong> — Diámetro exterior / bore<br>
+            <strong>A</strong> — Ángulo cónico<br>
+            <strong>Cuñero</strong> — Con o sin ranura de cuña
+          </div>
+        </div>
       </div>
-      <div class="filtro-wrap">
-        <span class="filtro-label">Medida</span>
-        <select id="filtroMedida" onchange="aplicarFiltros()">
-          <option value="">Todas</option>
-        </select>
+
+      <!-- Sin tipo seleccionado -->
+      <div id="imgGeneral" class="taper-img-card" style="display:flex">
+        <div style="width:120px;height:80px;background:var(--surface);border-radius:6px;
+          display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0">🔧</div>
+        <div class="taper-img-info">
+          <div class="taper-img-title">Selecciona el tipo para ver el diagrama</div>
+          <div class="taper-dim">
+            <strong>Serie</strong> — Modelo del buje (1008, 1610...)<br>
+            <strong>D/d</strong> — Diámetros exterior e interior<br>
+            <strong>L</strong> — Largo total<br>
+            <strong>Cuñero</strong> — Con o sin ranura
+          </div>
+        </div>
       </div>
-      <div class="filtro-wrap">
-        <span class="filtro-label">Material</span>
-        <select id="filtroMaterial" onchange="aplicarFiltros()">
-          <option value="">Todos</option>
-          <option value="Inoxidable">Inoxidable</option>
-          <option value="Galvanizado">Galvanizado</option>
-          <option value="Negro">Negro</option>
-        </select>
+
+    </div>
+
+    <!-- Filtros estándar (tornillo/tuerca/roldana) -->
+    <div id="filtrosEstandar">
+      <div class="filtros-grid">
+        <div class="filtro-wrap">
+          <span class="filtro-label">Tipo</span>
+          <select id="filtroTipo" onchange="onTipoChange()">
+            <option value="">Todos</option>
+          </select>
+        </div>
+        <div class="filtro-wrap">
+          <span class="filtro-label">Sistema</span>
+          <select id="filtroSistema" onchange="onSistemaChange()">
+            <option value="">Todos</option>
+          </select>
+        </div>
+        <div class="filtro-wrap">
+          <span class="filtro-label">Medida</span>
+          <select id="filtroMedida" onchange="aplicarFiltros()">
+            <option value="">Todas</option>
+          </select>
+        </div>
+        <div class="filtro-wrap">
+          <span class="filtro-label">Material</span>
+          <select id="filtroMaterial" onchange="aplicarFiltros()">
+            <option value="">Todos</option>
+            <option value="Inoxidable">Inoxidable</option>
+            <option value="Galvanizado">Galvanizado</option>
+            <option value="Negro">Negro</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filtros Taper Lock -->
+    <div id="filtrosTaper" style="display:none">
+      <div class="filtros-grid">
+        <div class="filtro-wrap">
+          <span class="filtro-label">Tipo</span>
+          <select id="filtroTaperTipo" onchange="aplicarFiltrosTaper(); updateTaperImage()">
+            <option value="">Todos</option>
+          </select>
+        </div>
+        <div class="filtro-wrap">
+          <span class="filtro-label">Serie</span>
+          <select id="filtroTaperSerie" onchange="aplicarFiltrosTaper()">
+            <option value="">Todas</option>
+          </select>
+        </div>
+        <div class="filtro-wrap">
+          <span class="filtro-label">Bore (D1)</span>
+          <select id="filtroTaperBore" onchange="aplicarFiltrosTaper()">
+            <option value="">Todos</option>
+          </select>
+        </div>
+        <div class="filtro-wrap">
+          <span class="filtro-label">Cuñero</span>
+          <select id="filtroTaperCunero" onchange="aplicarFiltrosTaper()">
+            <option value="">Todos</option>
+            <option value="Con cuñero">Con cuñero</option>
+            <option value="Sin cuñero">Sin cuñero</option>
+          </select>
+        </div>
       </div>
     </div>
 
     <div class="search-row">
-      <input type="text" id="searchTorn" placeholder="Buscar por medida, tipo, material..." autocomplete="off" autocorrect="off" autocapitalize="off">
-      <button onclick="aplicarFiltros()">Buscar</button>
+      <input type="text" id="searchTorn" placeholder="Buscar..." autocomplete="off" autocorrect="off" autocapitalize="off">
+      <button onclick="buscar()">Buscar</button>
     </div>
 
     <div class="tabla-count" id="tablaCount">Cargando...</div>
     <div class="tabla-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th onclick="sortBy('tipo')">Tipo <span class="si">↕</span></th>
-            <th onclick="sortBy('medida')">Medida <span class="si">↕</span></th>
-            <th onclick="sortBy('largo')">Largo <span class="si">↕</span></th>
-            <th onclick="sortBy('material')">Material <span class="si">↕</span></th>
-            <th onclick="sortBy('piezas')">Piezas <span class="si">↕</span></th>
-            <th onclick="sortBy('estado')">Estado <span class="si">↕</span></th>
-          </tr>
-        </thead>
+      <!-- Tabla estándar -->
+      <table id="tablaEstandar">
+        <thead><tr>
+          <th onclick="sortBy('tipo')">Tipo <span class="si">↕</span></th>
+          <th onclick="sortBy('medida')">Medida <span class="si">↕</span></th>
+          <th onclick="sortBy('largo')">Largo <span class="si">↕</span></th>
+          <th onclick="sortBy('material')">Material <span class="si">↕</span></th>
+          <th onclick="sortBy('piezas')">Piezas <span class="si">↕</span></th>
+          <th onclick="sortBy('estado')">Estado <span class="si">↕</span></th>
+        </tr></thead>
         <tbody id="tablaBody">
-          <tr><td colspan="6" class="tabla-empty">⚙️ Cargando inventario...</td></tr>
+          <tr><td colspan="6" class="tabla-empty">⚙️ Cargando...</td></tr>
+        </tbody>
+      </table>
+      <!-- Tabla Taper Lock -->
+      <table id="tablaTaper" style="display:none">
+        <thead><tr>
+          <th onclick="sortTaper('tipo')">Tipo <span class="si">↕</span></th>
+          <th onclick="sortTaper('serie')">Serie <span class="si">↕</span></th>
+          <th onclick="sortTaper('bore')">Bore D1 <span class="si">↕</span></th>
+          <th onclick="sortTaper('largo')">Largo L <span class="si">↕</span></th>
+          <th onclick="sortTaper('cuñero')">Cuñero <span class="si">↕</span></th>
+          <th onclick="sortTaper('piezas')">Piezas <span class="si">↕</span></th>
+          <th onclick="sortTaper('estado')">Estado <span class="si">↕</span></th>
+        </tr></thead>
+        <tbody id="taperBody">
+          <tr><td colspan="7" class="tabla-empty">Cargando...</td></tr>
         </tbody>
       </table>
     </div>
@@ -355,9 +471,9 @@ tr.item-row:active td{background:rgba(26,111,196,.14)}
   <div class="card" id="step4">
     <div class="back-link" onclick="goBack(3)">← Volver</div>
     <div class="card-label">Paso 4 de 6</div>
-    <div class="card-title" id="tituloPaso4">¿Cuántas piezas retiras?</div>
+    <div class="card-title" id="tituloCantidad">¿Cuántas piezas?</div>
 
-    <div class="sel-card active" id="selCard">
+    <div class="sel-card">
       <div class="sel-title" id="selNombre">—</div>
       <div class="sel-detail" id="selDetalle">—</div>
     </div>
@@ -370,43 +486,41 @@ tr.item-row:active td{background:rgba(26,111,196,.14)}
       </div>
     </div>
 
-    <div class="qty-row">
-      <input type="number" id="cantidad" placeholder="Cantidad de piezas" min="1" step="1" inputmode="numeric">
-    </div>
-    <div id="alertaStock"></div>
-    <div class="error-msg" id="err3">Ingresa una cantidad válida.</div>
+    <input type="number" id="cantidad" placeholder="Cantidad de piezas" min="1" step="1" inputmode="numeric" style="margin-bottom:12px">
+    <div id="alertaStock" style="margin-bottom:4px"></div>
+    <div class="error-msg" id="err4">Ingresa una cantidad válida.</div>
     <input type="text" id="motivo" placeholder="Motivo / proyecto (opcional)" style="margin-bottom:14px" autocapitalize="sentences">
-    <button class="btn btn-primary" onclick="goStep4()">Continuar →</button>
+    <button class="btn btn-primary" onclick="goStep5()">Continuar →</button>
   </div>
 
-  <!-- PASO 5: Tuerca y Roldana opcionales -->
-  <div class="card" id="step4b">
+  <!-- PASO 5: Tuerca/Roldana opcionales (solo si es tornillo) -->
+  <div class="card" id="step5">
     <div class="back-link" onclick="goBack(4)">← Volver</div>
     <div class="card-label">Paso 5 de 6</div>
     <div class="card-title">¿Agregas tuerca o roldana?</div>
 
-    <div id="tuercaSection" style="margin-bottom:18px">
-      <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px">Tuerca</div>
-      <div id="tuercaOpciones" style="display:flex;flex-direction:column;gap:8px"></div>
+    <div style="margin-bottom:18px">
+      <div class="filtro-label" style="margin-bottom:8px">Tuerca</div>
+      <div id="tuercaOpciones"></div>
       <div id="tuercaCantWrap" style="display:none;margin-top:8px">
         <input type="number" id="cantTuercaInput" placeholder="Cantidad de tuercas" min="1" step="1" inputmode="numeric">
       </div>
     </div>
 
-    <div id="roldanaSection">
-      <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px">Roldana</div>
-      <div id="roldanaOpciones" style="display:flex;flex-direction:column;gap:8px"></div>
+    <div>
+      <div class="filtro-label" style="margin-bottom:8px">Roldana</div>
+      <div id="roldanaOpciones"></div>
       <div id="roldanaCantWrap" style="display:none;margin-top:8px">
         <input type="number" id="cantRoldanaInput" placeholder="Cantidad de roldanas" min="1" step="1" inputmode="numeric">
       </div>
     </div>
 
     <br>
-    <button class="btn btn-primary" onclick="goStep5()">Continuar →</button>
+    <button class="btn btn-primary" onclick="goStep6()">Continuar →</button>
   </div>
 
   <!-- PASO 6: Confirmar -->
-  <div class="card" id="step5">
+  <div class="card" id="step6">
     <div class="back-link" onclick="goBack(5)">← Corregir</div>
     <div class="card-label">Paso 6 de 6</div>
     <div class="card-title">Confirma el movimiento</div>
@@ -418,6 +532,7 @@ tr.item-row:active td{background:rgba(26,111,196,.14)}
     </button>
     <div class="error-msg" id="errEnvio"></div>
   </div>
+
 </div>
 
 <!-- SUCCESS -->
@@ -426,7 +541,7 @@ tr.item-row:active td{background:rgba(26,111,196,.14)}
   <div class="success-title" id="successTitle">¡Movimiento registrado!</div>
   <div class="success-sub" id="successMsg">Stock actualizado correctamente.</div>
   <div class="success-detail" id="successDetail"></div>
-  <button class="btn btn-primary" onclick="resetForm()" style="max-width:340px">Registrar otro retiro</button>
+  <button class="btn btn-primary" onclick="resetForm()" style="max-width:340px">Registrar otro movimiento</button>
 </div>
 
 <script>
@@ -434,69 +549,61 @@ tr.item-row:active td{background:rgba(26,111,196,.14)}
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyMkzBslL2Dy8N0fYIkUGeo_QQ85FZi_1ksob7oGDjFgZe5Wo87QgoSvR2ZLi9vROAu/exec";
 // ═══════════════════════════════════════════════════════
 
-let materiales  = [];  // tornillos
-let tuercas     = [];  // tuercas del sheet
-let roldanas    = [];  // roldanas del sheet
+// ── Estado global ──────────────────────────────────────
+let tornillos   = [];
+let tuercas     = [];
+let roldanas    = [];
+let taperlocks  = [];
 let listaActiva = [];
-let tabActual   = 'tornillo'; // 'tornillo' o 'tuerca'
+let taperActiva = [];
+let tabActual   = 'tornillo';
 let selMat      = null;
-let selCategoria= 'tornillo'; // qué se seleccionó: 'tornillo' o 'tuerca'
+let selCategoria= 'tornillo';
 let selTuerca   = null;
 let selRoldana  = null;
 let cantTuerca  = 0;
 let cantRoldana = 0;
-let tipoMov = '';
-let sortCol = '';
-let sortDir = 1;
+let tipoMov     = '';
+let sortCol     = '';
+let sortDir     = 1;
+let sortColTaper= '';
+let sortDirTaper= 1;
 
-// ── Utilidades ──────────────────────────────────────────
-const norm = str => (str||'').trim().toLowerCase()
-  .normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+// ── Utilidades ─────────────────────────────────────────
+const norm = s => (s||'').trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
 
-// Convierte fracción o métrico a número para ordenar
-const toNum = str => {
-  if (!str) return 0;
-  const s = String(str).trim();
-  // Métrico: M6x1.0 → 6, M10x1.5 → 10
-  const met = s.match(/^M(\d+(?:\.\d+)?)/i);
+const toNum = s => {
+  if (!s) return 0;
+  const str = String(s).trim();
+  const met = str.match(/^M(\d+(?:\.\d+)?)/i);
   if (met) return parseFloat(met[1]) || 0;
-  // Pulgadas con fracción: 5/16-18 → 5/16 = 0.3125, 1/4-20 → 0.25
-  const frac = s.match(/^(\d+)\/(\d+)/);
-  if (frac) {
-    const num = parseInt(frac[1]);
-    const den = parseInt(frac[2]);
-    return den > 0 ? num / den : 0;
-  }
-  // Número simple
-  const n = parseFloat(s);
+  const frac = str.match(/^(\d+)\/(\d+)/);
+  if (frac) { const d = parseInt(frac[2]); return d ? parseInt(frac[1])/d : 0; }
+  const n = parseFloat(str);
   return isNaN(n) ? 0 : n;
 };
 
 const tipoIcon = t => {
   const n = norm(t);
-  if (n.includes('allen'))   return '⬡';
-  if (n.includes('cruz'))    return '✚';
-  if (n.includes('plano'))   return '▱';
-  if (n.includes('hex'))     return '⬢';
-  if (n.includes('tuerca'))  return '◉';
+  if (n.includes('allen'))  return '⬡';
+  if (n.includes('cruz'))   return '✚';
+  if (n.includes('plano'))  return '▱';
+  if (n.includes('hex'))    return '⬢';
+  if (n.includes('tuerca')) return '◉';
+  if (n.includes('rold'))   return '⭕';
   return '🔩';
 };
 
-const estadoBadge = m => {
-  if (m.piezas <= m.minimo * 0.5) return '<span class="badge badge-crit">Crítico</span>';
-  if (m.piezas <= m.minimo)       return '<span class="badge badge-low">Bajo</span>';
+const estadoBadge = piezas => {
+  // Stock mínimo fijo en 20
+  if (piezas <= 10)  return '<span class="badge badge-crit">Crítico</span>';
+  if (piezas <= 20)  return '<span class="badge badge-low">Bajo</span>';
   return '<span class="badge badge-ok">OK</span>';
 };
 
-const estadoVal = m => {
-  if (m.piezas <= m.minimo * 0.5) return 'CRITICO';
-  if (m.piezas <= m.minimo)       return 'BAJO';
-  return 'OK';
-};
-
-// ── Cargar inventario ───────────────────────────────────
+// ── Cargar inventario ──────────────────────────────────
 function loadMateriales() {
-  if (materiales.length > 0) { rebuildCascade(); return; }
+  if (tornillos.length > 0) { rebuildCascade(); return; }
   document.getElementById('tablaCount').textContent = 'Cargando...';
   document.getElementById('tablaBody').innerHTML =
     '<tr><td colspan="6" class="tabla-empty">⚙️ Cargando inventario...</td></tr>';
@@ -504,18 +611,15 @@ function loadMateriales() {
   fetch(SCRIPT_URL + '?action=getMateriales')
     .then(r => r.json())
     .then(data => {
-      const limpia = arr => (arr||[]).map(m => ({
-        ...m,
-        tipo:     (m.tipo     ||'').trim(),
-        medida:   (m.medida   ||'').trim(),
-        largo:    (m.largo    ||'').trim(),
-        material: (m.material ||'').trim(),
-        sistema:  (m.sistema  ||'').trim(),
-        lugar:    (m.lugar    ||'').trim(),
-      }));
-      materiales = limpia(data.tornillos || data.materiales || []);
-      tuercas    = limpia(data.tuercas   || []);
-      roldanas   = limpia(data.roldanas  || []);
+      const limpia = arr => (arr||[]).map(m => {
+        const obj = {};
+        Object.keys(m).forEach(k => { obj[k] = typeof m[k]==='string' ? m[k].trim() : m[k]; });
+        return obj;
+      });
+      tornillos  = limpia(data.tornillos  || []);
+      tuercas    = limpia(data.tuercas    || []);
+      roldanas   = limpia(data.roldanas   || []);
+      taperlocks = limpia(data.taperlocks || []);
       rebuildCascade();
     })
     .catch(() => {
@@ -525,40 +629,43 @@ function loadMateriales() {
     });
 }
 
-// ── Filtros en cascada ──────────────────────────────────
-
-// ── Tab Tornillo / Tuerca ──────────────────────────────
-const TIPOS_TORNILLO = [
-  'Tornillo Allen','Tornillo Conico Allen','Tornillo Boton Allen',
-  'Tornillo Boton Cruz','Tornillo Boton Plano','Tornillo Conico Cruz',
-  'Tornillo Conico Plano','Tornillo Hexagonal'
-];
-
+// ── Tabs ──────────────────────────────────────────────
 function switchTab(tab) {
   tabActual = tab;
-  // Update tab buttons
-  document.getElementById('tabTornillo').classList.toggle('active', tab === 'tornillo');
-  document.getElementById('tabTuerca').classList.toggle('active',   tab === 'tuerca');
-  // Reset filters
-  ['filtroTipo','filtroSistema','filtroMedida','filtroMaterial'].forEach(id =>
-    document.getElementById(id).value = '');
+  ['tornillo','tuerca','roldana','taperlock'].forEach(t => {
+    document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1))?.classList.remove('active');
+  });
+  const tabMap = {tornillo:'tabTornillo',tuerca:'tabTuerca',roldana:'tabRoldana',taperlock:'tabTaper'};
+  document.getElementById(tabMap[tab])?.classList.add('active');
+
+  const esTaper = tab === 'taperlock';
+  document.getElementById('taperInfo').style.display        = esTaper ? 'block' : 'none';
+  document.getElementById('filtrosEstandar').style.display  = esTaper ? 'none' : 'block';
+  document.getElementById('filtrosTaper').style.display     = esTaper ? 'block' : 'none';
+  document.getElementById('tablaEstandar').style.display    = esTaper ? 'none' : '';
+  document.getElementById('tablaTaper').style.display       = esTaper ? '' : 'none';
+
+  ['filtroTipo','filtroSistema','filtroMedida','filtroMaterial',
+   'filtroTaperTipo','filtroTaperSerie','filtroTaperBore','filtroTaperCunero']
+    .forEach(id => document.getElementById(id) && (document.getElementById(id).value = ''));
   document.getElementById('searchTorn').value = '';
-  rebuildCascade();
+
+  if (esTaper) { buildTaperFiltros(); updateTaperImage(); }
+  else         rebuildCascade();
 }
 
 function getDataSource() {
-  return tabActual === 'tuerca' ? tuercas : materiales;
+  const map = { tornillo: tornillos, tuerca: tuercas, roldana: roldanas };
+  return map[tabActual] || tornillos;
 }
 
-// Devuelve los materiales que pasan los filtros activos
-// ignorarMedida = true cuando necesitamos recalcular qué medidas mostrar
+// ── Filtros estándar en cascada ────────────────────────
 function filtrarActual(ignorarMedida = false) {
   const tipo    = document.getElementById('filtroTipo').value.trim();
   const sistema = document.getElementById('filtroSistema').value.trim();
   const medida  = ignorarMedida ? '' : document.getElementById('filtroMedida').value.trim();
   const mat     = document.getElementById('filtroMaterial').value.trim();
   const texto   = norm(document.getElementById('searchTorn').value);
-
   return getDataSource().filter(m => {
     if (tipo    && norm(m.tipo)    !== norm(tipo))    return false;
     if (sistema && norm(m.sistema) !== norm(sistema)) return false;
@@ -572,32 +679,28 @@ function filtrarActual(ignorarMedida = false) {
   });
 }
 
-// Reconstruye los tres selectores dinámicos (Sistema, Medida) desde cero
 function rebuildCascade() {
-  const tipo = document.getElementById('filtroTipo').value.trim();
+  if (tabActual === 'taperlock') { buildTaperFiltros(); return; }
   const src  = getDataSource();
+  const tipo = document.getElementById('filtroTipo').value.trim();
 
-  // Rebuild tipo dropdown based on current tab
+  // Tipos
   const selTipoEl = document.getElementById('filtroTipo');
   const tipoPrev  = selTipoEl.value;
   selTipoEl.innerHTML = '<option value="">Todos</option>';
-  const tiposUnicos = [...new Set(src.map(m => m.tipo).filter(Boolean))].sort();
-  tiposUnicos.forEach(t => {
+  [...new Set(src.map(m=>m.tipo).filter(Boolean))].sort().forEach(t => {
     const o = document.createElement('option');
     o.value = t; o.textContent = t;
     if (t === tipoPrev) o.selected = true;
     selTipoEl.appendChild(o);
   });
 
-  // Sistemas disponibles para el tipo seleccionado
-  const sistemas = [...new Set(
-    src
-      .filter(m => !tipo || norm(m.tipo) === norm(tipo))
-      .map(m => m.sistema).filter(Boolean)
-  )].sort();
-
+  // Sistemas
   const selSist = document.getElementById('filtroSistema');
   const sistPrev = selSist.value;
+  const sistemas = [...new Set(
+    src.filter(m => !tipo || norm(m.tipo)===norm(tipo)).map(m=>m.sistema).filter(Boolean)
+  )].sort();
   selSist.innerHTML = '<option value="">Todos</option>';
   sistemas.forEach(s => {
     const o = document.createElement('option');
@@ -611,16 +714,9 @@ function rebuildCascade() {
 }
 
 function rebuildMedidas() {
-  const baseList = filtrarActual(true);
-
-  const medidas = [...new Set(
-    baseList.map(m => m.medida).filter(Boolean)
-  )].sort((a, b) => {
-    const na = toNum(a), nb = toNum(b);
-    if (na !== nb) return na - nb;
-    return a.localeCompare(b);
-  });
-
+  const base = filtrarActual(true);
+  const medidas = [...new Set(base.map(m=>m.medida).filter(Boolean))]
+    .sort((a,b) => { const d=toNum(a)-toNum(b); return d!==0?d:a.localeCompare(b); });
   const selMed = document.getElementById('filtroMedida');
   const medPrev = selMed.value;
   selMed.innerHTML = '<option value="">Todas</option>';
@@ -631,7 +727,6 @@ function rebuildMedidas() {
     selMed.appendChild(o);
   });
   if (medPrev && !medidas.includes(medPrev)) selMed.value = '';
-
   aplicarFiltros();
 }
 
@@ -640,134 +735,225 @@ function onSistemaChange() { rebuildMedidas(); }
 
 function aplicarFiltros() {
   let lista = filtrarActual();
-
   if (sortCol) {
-    lista = [...lista].sort((a, b) => {
-      let va = a[sortCol] ?? '', vb = b[sortCol] ?? '';
-      if (sortCol === 'medida' || sortCol === 'largo') {
-        const d = toNum(va) - toNum(vb);
-        return d !== 0 ? d * sortDir : String(va).localeCompare(String(vb)) * sortDir;
+    lista = [...lista].sort((a,b) => {
+      let va=a[sortCol]??'', vb=b[sortCol]??'';
+      if (sortCol==='medida'||sortCol==='largo') {
+        const d=toNum(va)-toNum(vb);
+        return d!==0?d*sortDir:String(va).localeCompare(String(vb))*sortDir;
       }
-      if (typeof va === 'number') return (va - vb) * sortDir;
-      return String(va).localeCompare(String(vb)) * sortDir;
+      if (typeof va==='number') return (va-vb)*sortDir;
+      return String(va).localeCompare(String(vb))*sortDir;
     });
   }
-
   listaActiva = lista;
   renderTabla(lista);
 }
 
-// ── Renderizar tabla ────────────────────────────────────
 function renderTabla(list) {
   const body  = document.getElementById('tablaBody');
-  const count = document.getElementById('tablaCount');
   const n = list.length;
-  count.textContent = `${n} pieza${n !== 1 ? 's' : ''} encontrada${n !== 1 ? 's' : ''}`;
-
-  if (!n) {
-    body.innerHTML = '<tr><td colspan="6" class="tabla-empty">Sin resultados con esos filtros</td></tr>';
-    return;
-  }
-
-  body.innerHTML = list.map((m, i) => `
+  document.getElementById('tablaCount').textContent =
+    `${n} pieza${n!==1?'s':''} encontrada${n!==1?'s':''}`;
+  if (!n) { body.innerHTML='<tr><td colspan="6" class="tabla-empty">Sin resultados</td></tr>'; return; }
+  body.innerHTML = list.map((m,i) => `
     <tr class="item-row" id="row${i}" onclick="selectMat(${i})">
-      <td><span class="ti">${tipoIcon(m.tipo)}</span>${m.tipo}</td>
-      <td><strong>${m.medida || '—'}</strong></td>
-      <td>${m.largo || '—'}</td>
-      <td>${m.material || '—'}</td>
+      <td>${tipoIcon(m.tipo)} ${m.tipo}</td>
+      <td><strong>${m.medida||'—'}</strong></td>
+      <td>${m.largo||'—'}</td>
+      <td>${m.material||'—'}</td>
       <td style="font-family:'DM Mono',monospace;font-weight:600">${m.piezas}</td>
-      <td>${estadoBadge(m)}</td>
-    </tr>
-  `).join('');
+      <td>${estadoBadge(m.piezas)}</td>
+    </tr>`).join('');
 }
 
 function sortBy(col) {
-  sortDir = (sortCol === col) ? -sortDir : 1;
+  sortDir = sortCol===col ? -sortDir : 1;
   sortCol = col;
-  document.querySelectorAll('th').forEach(th => th.classList.remove('sorted'));
+  document.querySelectorAll('#tablaEstandar th').forEach(th=>th.classList.remove('sorted'));
   event.currentTarget.classList.add('sorted');
   aplicarFiltros();
 }
 
+// ── Filtros Taper Lock ─────────────────────────────────
+function buildTaperFiltros() {
+  const src = taperlocks;
+  // Tipos
+  const selTipo = document.getElementById('filtroTaperTipo');
+  const tipoPrev = selTipo.value;
+  selTipo.innerHTML = '<option value="">Todos</option>';
+  [...new Set(src.map(m=>m.tipo).filter(Boolean))].sort().forEach(t => {
+    const o=document.createElement('option'); o.value=t; o.textContent=t;
+    if(t===tipoPrev) o.selected=true; selTipo.appendChild(o);
+  });
+  // Series
+  const selSerie = document.getElementById('filtroTaperSerie');
+  const seriePrev = selSerie.value;
+  selSerie.innerHTML = '<option value="">Todas</option>';
+  [...new Set(src.map(m=>m.serie).filter(Boolean))].sort((a,b)=>toNum(a)-toNum(b)).forEach(s => {
+    const o=document.createElement('option'); o.value=s; o.textContent=s;
+    if(s===seriePrev) o.selected=true; selSerie.appendChild(o);
+  });
+  aplicarFiltrosTaper();
+}
+
+function aplicarFiltrosTaper() {
+  const tipo   = document.getElementById('filtroTaperTipo').value.trim();
+  const serie  = document.getElementById('filtroTaperSerie').value.trim();
+  const bore   = document.getElementById('filtroTaperBore').value.trim();
+  const cunero = document.getElementById('filtroTaperCunero').value.trim();
+  const texto  = norm(document.getElementById('searchTorn').value);
+
+  let lista = taperlocks.filter(m => {
+    if (tipo   && norm(m.tipo)   !== norm(tipo))   return false;
+    if (serie  && m.serie        !== serie)         return false;
+    if (bore   && m.bore         !== bore)          return false;
+    if (cunero && norm(m.cuñero) !== norm(cunero))  return false;
+    if (texto) {
+      const h = norm([m.tipo,m.serie,m.bore,m.largo,m.cuñero,m.material].join(' '));
+      if (!texto.split(/\s+/).every(p=>h.includes(p))) return false;
+    }
+    return true;
+  });
+
+  // Update bore filter based on current tipo+serie filter
+  const boreOpts = [...new Set(
+    taperlocks
+      .filter(m => (!tipo||norm(m.tipo)===norm(tipo)) && (!serie||m.serie===serie))
+      .map(m=>m.bore).filter(Boolean)
+  )].sort((a,b)=>toNum(a)-toNum(b));
+  const selBore = document.getElementById('filtroTaperBore');
+  const borePrev = selBore.value;
+  selBore.innerHTML = '<option value="">Todos</option>';
+  boreOpts.forEach(b => {
+    const o=document.createElement('option'); o.value=b; o.textContent=b;
+    if(b===borePrev) o.selected=true; selBore.appendChild(o);
+  });
+
+  if (sortColTaper) {
+    lista = [...lista].sort((a,b) => {
+      let va=a[sortColTaper]??'', vb=b[sortColTaper]??'';
+      if(typeof va==='number') return (va-vb)*sortDirTaper;
+      const d=toNum(va)-toNum(vb);
+      return d!==0?d*sortDirTaper:String(va).localeCompare(String(vb))*sortDirTaper;
+    });
+  }
+
+  taperActiva = lista;
+  renderTaper(lista);
+}
+
+function renderTaper(list) {
+  const body = document.getElementById('taperBody');
+  const n = list.length;
+  document.getElementById('tablaCount').textContent =
+    `${n} buje${n!==1?'s':''} encontrado${n!==1?'s':''}`;
+  if (!n) { body.innerHTML='<tr><td colspan="7" class="tabla-empty">Sin resultados</td></tr>'; return; }
+  body.innerHTML = list.map((m,i)=>`
+    <tr class="item-row" id="trow${i}" onclick="selectTaper(${i})">
+      <td>🔧 ${m.tipo}</td>
+      <td><strong>${m.serie||'—'}</strong></td>
+      <td>${m.bore||'—'}</td>
+      <td>${m.largo||'—'}</td>
+      <td>${m.cuñero||'—'}</td>
+      <td style="font-family:'DM Mono',monospace;font-weight:600">${m.piezas}</td>
+      <td>${estadoBadge(m.piezas)}</td>
+    </tr>`).join('');
+}
+
+function sortTaper(col) {
+  sortDirTaper = sortColTaper===col ? -sortDirTaper : 1;
+  sortColTaper = col;
+  document.querySelectorAll('#tablaTaper th').forEach(th=>th.classList.remove('sorted'));
+  event.currentTarget.classList.add('sorted');
+  aplicarFiltrosTaper();
+}
+
+function buscar() {
+  if (tabActual==='taperlock') aplicarFiltrosTaper();
+  else aplicarFiltros();
+}
+
+// ── Selección ─────────────────────────────────────────
 function selectMat(idx) {
   selMat = listaActiva[idx];
-  selCategoria = tabActual; // remember if tornillo or tuerca
-  document.querySelectorAll('.item-row').forEach(r => r.classList.remove('selected'));
-  const row = document.getElementById('row' + idx);
-  if (row) row.classList.add('selected');
-  setTimeout(() => goStep3(), 200);
+  selCategoria = tabActual;
+  document.querySelectorAll('.item-row').forEach(r=>r.classList.remove('selected'));
+  document.getElementById('row'+idx)?.classList.add('selected');
+  setTimeout(()=>irACantidad(), 200);
 }
 
-// ── Navegación ──────────────────────────────────────────
-// stepOrder maps logical step number to DOM ids
-const STEP_ORDER = ['step1','step2','step3','step4','step4b','step5'];
-const DOT_ORDER  = ['dot1', 'dot2', 'dot3', 'dot4', 'dot4b', 'dot5'];
-const LINE_ORDER = ['line1','line2','line3','line4','line4b'];
+function selectTaper(idx) {
+  selMat = taperActiva[idx];
+  selCategoria = 'taperlock';
+  document.querySelectorAll('.item-row').forEach(r=>r.classList.remove('selected'));
+  document.getElementById('trow'+idx)?.classList.add('selected');
+  setTimeout(()=>irACantidad(), 200);
+}
+
+// ── Navegación ─────────────────────────────────────────
+const STEPS = ['step1','step2','step3','step4','step5','step6'];
+const DOTS  = ['dot1', 'dot2', 'dot3', 'dot4', 'dot5', 'dot6'];
+const LINES = ['line1','line2','line3','line4','line5'];
 
 function setStep(n) {
-  // n is 1-based index into STEP_ORDER
-  STEP_ORDER.forEach((id, i) => {
-    document.getElementById(id)?.classList.remove('active');
-    const dot = document.getElementById(DOT_ORDER[i]);
+  STEPS.forEach((id,i) => document.getElementById(id)?.classList.remove('active'));
+  DOTS.forEach((id,i) => {
+    const dot = document.getElementById(id);
     if (!dot) return;
     dot.classList.remove('active','done');
-    const pos = i + 1;
-    if (pos < n)       { dot.classList.add('done');   dot.textContent = '✓'; }
-    else if (pos === n){ dot.classList.add('active');  dot.textContent = pos; }
-    else                 dot.textContent = pos;
+    const pos = i+1;
+    if (pos<n)       { dot.classList.add('done');  dot.textContent='✓'; }
+    else if (pos===n){ dot.classList.add('active'); dot.textContent=pos; }
+    else               dot.textContent=pos;
   });
-  LINE_ORDER.forEach((id, i) => {
-    const line = document.getElementById(id);
-    if (line) line.classList.toggle('done', i + 1 < n);
+  LINES.forEach((id,i) => {
+    const l = document.getElementById(id);
+    if (l) l.classList.toggle('done', i+1<n);
   });
-  document.getElementById(STEP_ORDER[n-1])?.classList.add('active');
-  window.scrollTo(0, 0);
+  document.getElementById(STEPS[n-1])?.classList.add('active');
+  window.scrollTo(0,0);
 }
+
+function goBack(n) { setStep(n); }
 
 function goStep2() {
   const n = document.getElementById('nombre').value.trim();
-  if (!n) { document.getElementById('err1').style.display = 'block'; return; }
-  document.getElementById('err1').style.display = 'none';
+  if (!n) { document.getElementById('err1').style.display='block'; return; }
+  document.getElementById('err1').style.display='none';
   setStep(2);
 }
 
 function seleccionarMov(tipo) {
   tipoMov = tipo;
-  document.querySelectorAll('.mov-btn').forEach(b => b.classList.remove('selected'));
-  document.getElementById(tipo === 'Salida' ? 'btnSalida' : 'btnEntrada').classList.add('selected');
-  
-  // Actualizar título del paso 4 según tipo
-  const titulo = document.getElementById('tituloPaso4');
-  if (titulo) titulo.textContent = tipo === 'Salida' ? '¿Cuántas piezas retiras?' : '¿Cuántas piezas metes?';
-
-  setTimeout(() => {
-    setStep(3);
-    loadMateriales();
-  }, 150);
+  document.getElementById('btnSalida').classList.toggle('selected', tipo==='Salida');
+  document.getElementById('btnEntrada').classList.toggle('selected', tipo==='Entrada');
+  setTimeout(()=>{ setStep(3); loadMateriales(); }, 150);
 }
 
-function goStep3() {
+function irACantidad() {
   if (!selMat) return;
   setStep(4);
 
-  const esTuerca = selCategoria === 'tuerca';
-  document.getElementById('tituloPaso4').textContent =
-    esTuerca
-      ? (tipoMov === 'Salida' ? '¿Cuántas tuercas retiras?' : '¿Cuántas tuercas metes?')
-      : (tipoMov === 'Salida' ? '¿Cuántos tornillos retiras?' : '¿Cuántos tornillos metes?');
-  document.getElementById('selNombre').textContent =
-    `${selMat.tipo} ${selMat.medida}${selMat.largo ? ' × ' + selMat.largo : ''} — ${selMat.material}`;
-  document.getElementById('selDetalle').textContent =
-    `Stock: ${selMat.piezas} piezas · Mínimo: ${selMat.minimo} · Sistema: ${selMat.sistema || '—'}`;
+  const esTaper = selCategoria === 'taperlock';
+  let nombreStr, detalleStr;
 
-  // Mostrar ubicación
-  const lc = document.getElementById('lugarCard');
-  if (selMat.lugar) {
-    lc.classList.add('active');
-    document.getElementById('lugarVal').textContent = selMat.lugar;
+  if (esTaper) {
+    nombreStr = `${selMat.tipo} Serie ${selMat.serie} — Bore ${selMat.bore}`;
+    detalleStr= `Largo: ${selMat.largo||'—'} · Cuñero: ${selMat.cuñero||'—'} · Material: ${selMat.material||'—'}`;
   } else {
-    lc.classList.remove('active');
+    nombreStr = `${selMat.tipo} ${selMat.medida}${selMat.largo?' × '+selMat.largo:''} — ${selMat.material}`;
+    detalleStr= `Stock: ${selMat.piezas} pzas · Mínimo: ${selMat.minimo} · ${selMat.sistema||''}`;
   }
+
+  document.getElementById('tituloCantidad').textContent =
+    tipoMov==='Salida' ? '¿Cuántas piezas retiras?' : '¿Cuántas piezas metes?';
+  document.getElementById('selNombre').textContent  = nombreStr;
+  document.getElementById('selDetalle').textContent = detalleStr;
+
+  const lc = document.getElementById('lugarCard');
+  if (selMat.lugar) { lc.classList.add('show'); document.getElementById('lugarVal').textContent = selMat.lugar; }
+  else lc.classList.remove('show');
 
   document.getElementById('cantidad').value = '';
   document.getElementById('alertaStock').innerHTML = '';
@@ -776,260 +962,224 @@ function goStep3() {
 }
 
 function updateAlerta() {
-  const cant = parseInt(document.getElementById('cantidad').value) || 0;
-  const al = document.getElementById('alertaStock');
-  if (!selMat || cant <= 0) { al.innerHTML = ''; return; }
-  if (tipoMov === 'Salida') {
-    if (cant > selMat.piezas) {
-      al.innerHTML = `<div class="alert alert-danger">⛔ Stock insuficiente. Solo hay ${selMat.piezas} piezas.</div>`;
-      return;
-    }
-    const r = selMat.piezas - cant;
-    if (r <= selMat.minimo * 0.5)
-      al.innerHTML = `<div class="alert alert-danger">🔴 Quedarán <strong>${r} piezas</strong> — nivel CRÍTICO.</div>`;
-    else if (r <= selMat.minimo)
-      al.innerHTML = `<div class="alert alert-warn">⚠️ Quedarán <strong>${r} piezas</strong> — bajo el mínimo.</div>`;
-    else
-      al.innerHTML = `<div class="alert alert-info">ℹ️ Quedarán <strong>${r} piezas</strong> en inventario.</div>`;
-  } else {
-    const r = selMat.piezas + cant;
-    al.innerHTML = `<div class="alert alert-info">📥 El stock quedará en <strong>${r} piezas</strong> después de la entrada.</div>`;
+  const cant = parseInt(document.getElementById('cantidad').value)||0;
+  const al   = document.getElementById('alertaStock');
+  if (!selMat||cant<=0) { al.innerHTML=''; return; }
+  if (tipoMov==='Salida'&&cant>selMat.piezas) {
+    al.innerHTML=`<div class="alert alert-danger">⛔ Stock insuficiente. Solo hay ${selMat.piezas} piezas.</div>`;
+    return;
   }
-}
-
-function goStep4() {
-  const cant = parseInt(document.getElementById('cantidad').value);
-  const e = document.getElementById('err3');
-  if (!cant || cant <= 0) { e.style.display = 'block'; return; }
-  e.style.display = 'none';
-  if (tipoMov === 'Salida' && cant > selMat.piezas) { e.textContent = 'Stock insuficiente.'; e.style.display = 'block'; return; }
-  if (selCategoria === 'tuerca') {
-    // Tuerca: skip step4b, go directly to confirm
-    cantTuerca = 0; cantRoldana = 0; selTuerca = null; selRoldana = null;
-    goStep4Confirm();
-  } else {
-    // Tornillo: go to step4b for tuerca/roldana options
-    goStep4b();
-  }
-  return;
-}
-
-function goStep4Confirm() {
-  const cant = parseInt(document.getElementById('cantidad').value);
-  const r = tipoMov === 'Salida' ? selMat.piezas - cant : selMat.piezas + cant;
-  setStep(6); // step5 (confirm) is position 6 in STEP_ORDER
-  const mot = document.getElementById('motivo').value.trim();
-
-  document.getElementById('confirmResumen').innerHTML = `
-    <div class="confirm-row"><span class="confirm-label">Persona</span>
-      <span class="confirm-value">${document.getElementById('nombre').value.trim()}</span></div>
-    <div class="confirm-row"><span class="confirm-label">Pieza</span>
-      <span class="confirm-value">${selMat.tipo} ${selMat.medida} × ${selMat.largo}</span></div>
-    <div class="confirm-row"><span class="confirm-label">Material</span>
-      <span class="confirm-value">${selMat.material} · ${selMat.sistema || ''}</span></div>
-    <div class="confirm-row"><span class="confirm-label">Cantidad</span>
-      <span class="confirm-value">${cant} piezas</span></div>
-    <div class="confirm-row"><span class="confirm-label">Motivo</span>
-      <span class="confirm-value">${mot || '—'}</span></div>
-    <div class="confirm-row"><span class="confirm-label">Ubicación</span>
-      <span class="confirm-value" style="color:var(--accent-light);font-family:'DM Mono',monospace;font-size:18px;font-weight:700">${selMat.lugar || '—'}</span></div>
-    <div class="confirm-row"><span class="confirm-label">Stock restante</span>
-      <span class="confirm-value">${r} piezas</span></div>
-  `;
-
-  let ah = '';
-  if (r <= selMat.minimo * 0.5)
-    ah = `<div class="alert alert-danger" style="margin-bottom:14px">🔴 Stock crítico. Avisa al encargado.</div>`;
-  else if (r <= selMat.minimo)
-    ah = `<div class="alert alert-warn" style="margin-bottom:14px">⚠️ Stock bajo. Considera reabastecer.</div>`;
-  document.getElementById('confirmAlerta').innerHTML = ah;
-
-  // Agregar tuerca/roldana al resumen si fueron seleccionadas
-  let extraHTML = '';
-  if (selTuerca && cantTuerca > 0) {
-    extraHTML += `<div class="confirm-row"><span class="confirm-label">+ Tuerca</span>
-      <span class="confirm-value">${selTuerca.tipo} ${selTuerca.medida} × ${cantTuerca} pzas · 📍${selTuerca.lugar||'—'}</span></div>`;
-  }
-  if (selRoldana && cantRoldana > 0) {
-    extraHTML += `<div class="confirm-row"><span class="confirm-label">+ Roldana</span>
-      <span class="confirm-value">${selRoldana.tipo} ${selRoldana.medida} × ${cantRoldana} pzas · 📍${selRoldana.lugar||'—'}</span></div>`;
-  }
-  if (extraHTML) {
-    document.getElementById('confirmResumen').innerHTML += extraHTML;
-  }
-}
-
-function goStep4b() {
-  // Cargar tuercas y roldanas que coincidan con la medida del tornillo seleccionado
-  const medida = selMat.medida;
-  selTuerca  = null;
-  selRoldana = null;
-
-  // Tuercas coincidentes
-  const tuercasMatch = tuercas.filter(t => t.medida === medida);
-  const tuercaDiv = document.getElementById('tuercaOpciones');
-  const tuercaCantWrap = document.getElementById('tuercaCantWrap');
-
-  if (tuercasMatch.length === 0) {
-    tuercaDiv.innerHTML = `<div style="font-size:13px;color:var(--text2);padding:10px;background:var(--surface2);border-radius:var(--radius-sm)">No hay tuercas con medida ${medida}</div>`;
-    tuercaCantWrap.style.display = 'none';
-  } else {
-    tuercaDiv.innerHTML = tuercasMatch.map((t,i) => `
-      <div class="acc-item" id="tuerca_${i}" onclick="selAcc('tuerca',${i})" data-idx="${i}">
-        <div style="font-size:13px;font-weight:600">${t.tipo} ${t.medida} — ${t.material}</div>
-        <div style="font-size:12px;color:var(--text2)">${t.piezas} piezas en stock · ${t.lugar||'Sin ubicación'}</div>
-      </div>`).join('');
-    tuercaCantWrap.style.display = 'none';
-  }
-
-  // Roldanas coincidentes
-  const roldanasMatch = roldanas.filter(r => r.medida === medida);
-  const roldanaDiv = document.getElementById('roldanaOpciones');
-  const roldanaCantWrap = document.getElementById('roldanaCantWrap');
-
-  if (roldanasMatch.length === 0) {
-    roldanaDiv.innerHTML = `<div style="font-size:13px;color:var(--text2);padding:10px;background:var(--surface2);border-radius:var(--radius-sm)">No hay roldanas con medida ${medida}</div>`;
-    roldanaCantWrap.style.display = 'none';
-  } else {
-    roldanaDiv.innerHTML = roldanasMatch.map((r,i) => `
-      <div class="acc-item" id="roldana_${i}" onclick="selAcc('roldana',${i})" data-idx="${i}">
-        <div style="font-size:13px;font-weight:600">${r.tipo} ${r.medida} — ${r.material}</div>
-        <div style="font-size:12px;color:var(--text2)">${r.piezas} piezas en stock · ${r.lugar||'Sin ubicación'}</div>
-      </div>`).join('');
-    roldanaCantWrap.style.display = 'none';
-  }
-
-  // Store matches for selection
-  window._tuercasMatch  = tuercasMatch;
-  window._roldanasMatch = roldanasMatch;
-
-  setStep(5); // step4b is position 5
-}
-
-function selAcc(tipo, idx) {
-  const items = tipo === 'tuerca' ? window._tuercasMatch : window._roldanasMatch;
-  const item  = items[idx];
-  const cantWrap = document.getElementById(tipo + 'CantWrap');
-
-  if (tipo === 'tuerca') {
-    if (selTuerca && selTuerca.fila === item.fila) {
-      // Deselect
-      selTuerca = null;
-      document.querySelectorAll('[id^="tuerca_"]').forEach(el => el.classList.remove('selected'));
-      cantWrap.style.display = 'none';
-    } else {
-      selTuerca = item;
-      document.querySelectorAll('[id^="tuerca_"]').forEach(el => el.classList.remove('selected'));
-      document.getElementById('tuerca_' + idx).classList.add('selected');
-      cantWrap.style.display = 'block';
-    }
-  } else {
-    if (selRoldana && selRoldana.fila === item.fila) {
-      selRoldana = null;
-      document.querySelectorAll('[id^="roldana_"]').forEach(el => el.classList.remove('selected'));
-      cantWrap.style.display = 'none';
-    } else {
-      selRoldana = item;
-      document.querySelectorAll('[id^="roldana_"]').forEach(el => el.classList.remove('selected'));
-      document.getElementById('roldana_' + idx).classList.add('selected');
-      cantWrap.style.display = 'block';
-    }
-  }
+  const r = tipoMov==='Salida' ? selMat.piezas-cant : selMat.piezas+cant;
+  if (r<=10)  al.innerHTML=`<div class="alert alert-danger">🔴 Quedarán <strong>${r} piezas</strong> — CRÍTICO.</div>`;
+  else if(r<=20) al.innerHTML=`<div class="alert alert-warn">⚠️ Quedarán <strong>${r} piezas</strong> — BAJO.</div>`;
+  else al.innerHTML=`<div class="alert alert-info">ℹ️ Quedarán <strong>${r} piezas</strong> en inventario.</div>`;
 }
 
 function goStep5() {
-  cantTuerca  = selTuerca  ? (parseInt(document.getElementById('cantTuercaInput').value)  || 0) : 0;
-  cantRoldana = selRoldana ? (parseInt(document.getElementById('cantRoldanaInput').value) || 0) : 0;
-  // Build confirm
-  goStep4Confirm();
+  const cant = parseInt(document.getElementById('cantidad').value);
+  const e = document.getElementById('err4');
+  if (!cant||cant<=0) { e.style.display='block'; return; }
+  e.style.display='none';
+  if (tipoMov==='Salida'&&cant>selMat.piezas) {
+    e.textContent='Stock insuficiente.'; e.style.display='block'; return;
+  }
+
+  // Si es tuerca, roldana o taperlock → saltar paso 5, ir directo a confirmar
+  if (selCategoria !== 'tornillo') {
+    selTuerca=null; selRoldana=null; cantTuerca=0; cantRoldana=0;
+    goStep6();
+    return;
+  }
+
+  // Es tornillo → mostrar paso 5 con tuerca/roldana opcionales
+  const medida = selMat.medida;
+  const tuercasMatch  = tuercas.filter(t=>t.medida===medida);
+  const roldanasMatch = roldanas.filter(r=>r.medida===medida);
+  window._tuercasMatch  = tuercasMatch;
+  window._roldanasMatch = roldanasMatch;
+
+  const renderAcc = (items, tipo, contenedor, cantWrap) => {
+    const el = document.getElementById(contenedor);
+    const cw = document.getElementById(cantWrap);
+    if (!items.length) {
+      el.innerHTML=`<div style="font-size:13px;color:var(--text2);padding:10px;background:var(--surface2);border-radius:var(--radius-sm)">No hay ${tipo}s con medida ${medida}</div>`;
+      cw.style.display='none'; return;
+    }
+    el.innerHTML = items.map((t,i)=>`
+      <div class="acc-item" id="${tipo}_${i}" onclick="selAcc('${tipo}',${i})">
+        <div style="font-size:13px;font-weight:600">${t.tipo} ${t.medida} — ${t.material}</div>
+        <div style="font-size:12px;color:var(--text2)">${t.piezas} pzas en stock · 📍${t.lugar||'—'}</div>
+      </div>`).join('');
+    cw.style.display='none';
+  };
+
+  renderAcc(tuercasMatch,  'tuerca',  'tuercaOpciones',  'tuercaCantWrap');
+  renderAcc(roldanasMatch, 'roldana', 'roldanaOpciones', 'roldanaCantWrap');
+  selTuerca=null; selRoldana=null;
+  setStep(5);
 }
 
-function goBack(n) { setStep(n); }
+function selAcc(tipo, idx) {
+  const items = tipo==='tuerca' ? window._tuercasMatch : window._roldanasMatch;
+  const item  = items[idx];
+  const cw    = document.getElementById(tipo+'CantWrap');
+  const current = tipo==='tuerca' ? selTuerca : selRoldana;
+  if (current && current.fila===item.fila) {
+    if (tipo==='tuerca') selTuerca=null; else selRoldana=null;
+    document.querySelectorAll(`[id^="${tipo}_"]`).forEach(el=>el.classList.remove('selected'));
+    cw.style.display='none';
+  } else {
+    if (tipo==='tuerca') selTuerca=item; else selRoldana=item;
+    document.querySelectorAll(`[id^="${tipo}_"]`).forEach(el=>el.classList.remove('selected'));
+    document.getElementById(tipo+'_'+idx).classList.add('selected');
+    cw.style.display='block';
+  }
+}
 
-// ── Enviar retiro ───────────────────────────────────────
+function goStep6() {
+  cantTuerca  = selTuerca  ? (parseInt(document.getElementById('cantTuercaInput')?.value)||0)  : 0;
+  cantRoldana = selRoldana ? (parseInt(document.getElementById('cantRoldanaInput')?.value)||0) : 0;
+  buildConfirm();
+  setStep(6);
+}
+
+function updateTaperImage() {
+  const tipo = document.getElementById('filtroTaperTipo').value.trim().toLowerCase();
+  document.getElementById('imgGeneral').style.display = tipo ? 'none' : 'flex';
+  document.getElementById('imgConico').style.display  = tipo.includes('conic') ? 'flex' : 'none';
+  document.getElementById('imgBushing').style.display = tipo.includes('bushing') ? 'flex' : 'none';
+}
+
+function buildConfirm() {
+  const cant = parseInt(document.getElementById('cantidad').value);
+  const r    = tipoMov==='Salida' ? selMat.piezas-cant : selMat.piezas+cant;
+  const mot  = document.getElementById('motivo').value.trim();
+  const esTaper = selCategoria==='taperlock';
+
+  let piezaStr = esTaper
+    ? `${selMat.tipo} Serie ${selMat.serie} Bore ${selMat.bore}`
+    : `${selMat.tipo} ${selMat.medida}${selMat.largo?' × '+selMat.largo:''}`;
+
+  let html = `
+    <div class="confirm-row"><span class="confirm-label">Movimiento</span>
+      <span class="confirm-value" style="color:${tipoMov==='Salida'?'#f87171':'#4ade80'};font-weight:700">
+        ${tipoMov==='Salida'?'📤 Salida':'📥 Entrada'}</span></div>
+    <div class="confirm-row"><span class="confirm-label">Persona</span>
+      <span class="confirm-value">${document.getElementById('nombre').value.trim()}</span></div>
+    <div class="confirm-row"><span class="confirm-label">Pieza</span>
+      <span class="confirm-value">${piezaStr}</span></div>
+    <div class="confirm-row"><span class="confirm-label">Material</span>
+      <span class="confirm-value">${selMat.material||'—'}${esTaper?' · Cuñero: '+(selMat.cuñero||'—'):' · '+(selMat.sistema||'')}</span></div>
+    <div class="confirm-row"><span class="confirm-label">Cantidad</span>
+      <span class="confirm-value">${cant} piezas</span></div>
+    <div class="confirm-row"><span class="confirm-label">Motivo</span>
+      <span class="confirm-value">${mot||'—'}</span></div>
+    <div class="confirm-row"><span class="confirm-label">📍 Ubicación</span>
+      <span class="confirm-value" style="color:var(--accent-light);font-family:'DM Mono',monospace;font-size:18px">${selMat.lugar||'—'}</span></div>
+    <div class="confirm-row"><span class="confirm-label">Stock restante</span>
+      <span class="confirm-value">${r} piezas</span></div>`;
+
+  if (selTuerca&&cantTuerca>0)
+    html+=`<div class="confirm-row"><span class="confirm-label">+ Tuerca</span>
+      <span class="confirm-value">${selTuerca.tipo} ${selTuerca.medida} × ${cantTuerca} pzas · 📍${selTuerca.lugar||'—'}</span></div>`;
+  if (selRoldana&&cantRoldana>0)
+    html+=`<div class="confirm-row"><span class="confirm-label">+ Roldana</span>
+      <span class="confirm-value">${selRoldana.tipo} ${selRoldana.medida} × ${cantRoldana} pzas · 📍${selRoldana.lugar||'—'}</span></div>`;
+
+  document.getElementById('confirmResumen').innerHTML = html;
+
+  let ah='';
+  if (r<=10)  ah=`<div class="alert alert-danger" style="margin-bottom:14px">🔴 Stock crítico. Avisa al encargado.</div>`;
+  else if(r<=20) ah=`<div class="alert alert-warn" style="margin-bottom:14px">⚠️ Stock bajo del mínimo.</div>`;
+  document.getElementById('confirmAlerta').innerHTML = ah;
+}
+
+// ── Enviar ──────────────────────────────────────────────
 async function enviarRetiro() {
-  const btn = document.getElementById('btnConfirmar');
-  const txt = document.getElementById('btnTxt');
-  const sp  = document.getElementById('btnSpinner');
-  const er  = document.getElementById('errEnvio');
-  btn.disabled = true; txt.textContent = 'Enviando...';
-  sp.style.display = 'block'; er.style.display = 'none';
+  const btn=document.getElementById('btnConfirmar');
+  const txt=document.getElementById('btnTxt');
+  const sp =document.getElementById('btnSpinner');
+  const er =document.getElementById('errEnvio');
+  btn.disabled=true; txt.textContent='Enviando...'; sp.style.display='block'; er.style.display='none';
+
+  const cant = parseInt(document.getElementById('cantidad').value);
+  const esTaper = selCategoria==='taperlock';
 
   const payload = {
     action:    'registrarMovimiento',
-    tipoMov:   tipoMov,
+    tipoMov,
     categoria: selCategoria,
-    nombre:   document.getElementById('nombre').value.trim(),
-    tipo:     selMat.tipo,
-    medida:   selMat.medida,
-    largo:    selMat.largo,
-    material: selMat.material,
-    sistema:  selMat.sistema,
-    cantidad: parseInt(document.getElementById('cantidad').value),
-    motivo:   document.getElementById('motivo').value.trim(),
-    fila:     selMat.fila,
-    lugar:    selMat.lugar || '',
-    tuerca:   selTuerca  && cantTuerca  > 0 ? { ...selTuerca,  cantidad: cantTuerca  } : null,
-    roldana:  selRoldana && cantRoldana > 0 ? { ...selRoldana, cantidad: cantRoldana } : null,
+    nombre:    document.getElementById('nombre').value.trim(),
+    tipo:      selMat.tipo,
+    medida:    esTaper ? selMat.serie  : (selMat.medida||''),
+    largo:     selMat.largo || '',
+    material:  selMat.material || '',
+    sistema:   esTaper ? '' : (selMat.sistema||''),
+    serie:     esTaper ? selMat.serie  : '',
+    bore:      esTaper ? selMat.bore   : '',
+    'cuñero':  esTaper ? selMat.cuñero : '',
+    cantidad:  cant,
+    motivo:    document.getElementById('motivo').value.trim(),
+    fila:      selMat.fila,
+    lugar:     selMat.lugar || '',
+    tuerca:    selTuerca&&cantTuerca>0 ? {...selTuerca, cantidad:cantTuerca}  : null,
+    roldana:   selRoldana&&cantRoldana>0 ? {...selRoldana, cantidad:cantRoldana} : null,
   };
 
   try {
-    const res  = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
+    const res  = await fetch(SCRIPT_URL, {method:'POST', body:JSON.stringify(payload)});
     const data = await res.json();
     if (data.ok) showSuccess(payload, data);
-    else throw new Error(data.error || 'Error desconocido');
+    else throw new Error(data.error||'Error desconocido');
   } catch(e) {
-    er.textContent = 'Error: ' + e.message; er.style.display = 'block';
-    btn.disabled = false; txt.textContent = '✓ Confirmar retiro'; sp.style.display = 'none';
+    er.textContent='Error: '+e.message; er.style.display='block';
+    btn.disabled=false; txt.textContent='✓ Confirmar'; sp.style.display='none';
   }
 }
 
 function showSuccess(payload, data) {
-  document.getElementById('mainFlow').style.display = 'none';
+  document.getElementById('mainFlow').style.display='none';
   document.getElementById('successScreen').classList.add('active');
-  document.getElementById('successTitle') && (document.getElementById('successTitle').textContent = tipoMov === 'Salida' ? '¡Salida registrada!' : '¡Entrada registrada!');
+  document.getElementById('successTitle').textContent =
+    tipoMov==='Salida' ? '¡Salida registrada!' : '¡Entrada registrada!';
   document.getElementById('successMsg').textContent =
-    `${payload.tipo} ${payload.medida} actualizado. Quedan ${data.stockRestante} piezas.`;
+    `${payload.tipo} actualizado. Quedan ${data.stockRestante} piezas.`;
   document.getElementById('successDetail').innerHTML = `
-    <div class="confirm-row"><span class="confirm-label">Persona</span>
-      <span class="confirm-value">${payload.nombre}</span></div>
-    <div class="confirm-row"><span class="confirm-label">Pieza</span>
-      <span class="confirm-value">${payload.tipo} ${payload.medida} × ${payload.largo}</span></div>
-    <div class="confirm-row"><span class="confirm-label">Cantidad</span>
-      <span class="confirm-value">${payload.cantidad} piezas</span></div>
-    <div class="confirm-row"><span class="confirm-label">Ubicación</span>
-      <span class="confirm-value" style="color:var(--accent-light);font-family:'DM Mono',monospace;font-size:18px;font-weight:700">${payload.lugar || '—'}</span></div>
-    <div class="confirm-row"><span class="confirm-label">Stock restante</span>
-      <span class="confirm-value">${data.stockRestante} piezas</span></div>
-  `;
+    <div class="confirm-row"><span class="confirm-label">Persona</span><span class="confirm-value">${payload.nombre}</span></div>
+    <div class="confirm-row"><span class="confirm-label">Pieza</span><span class="confirm-value">${payload.tipo} ${payload.medida}</span></div>
+    <div class="confirm-row"><span class="confirm-label">Cantidad</span><span class="confirm-value">${payload.cantidad} piezas</span></div>
+    <div class="confirm-row"><span class="confirm-label">📍 Ubicación</span><span class="confirm-value" style="color:var(--accent-light);font-family:'DM Mono',monospace;font-size:18px">${payload.lugar||'—'}</span></div>
+    <div class="confirm-row"><span class="confirm-label">Stock restante</span><span class="confirm-value">${data.stockRestante} piezas</span></div>`;
 }
 
 function resetForm() {
-  document.getElementById('mainFlow').style.display = 'block';
+  document.getElementById('mainFlow').style.display='block';
   document.getElementById('successScreen').classList.remove('active');
-  ['nombre','cantidad','motivo','searchTorn'].forEach(id =>
-    document.getElementById(id).value = '');
-  ['filtroTipo','filtroSistema','filtroMedida','filtroMaterial'].forEach(id =>
-    document.getElementById(id).value = '');
-  selMat = null; selTuerca = null; selRoldana = null; cantTuerca = 0; cantRoldana = 0;
-  selCategoria = 'tornillo'; tabActual = 'tornillo';
-  listaActiva = []; materiales = []; tuercas = []; roldanas = []; tipoMov = '';
-  document.querySelectorAll('.mov-btn').forEach(b => b.classList.remove('selected'));
+  ['nombre','cantidad','motivo','searchTorn','cantTuercaInput','cantRoldanaInput']
+    .forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+  ['filtroTipo','filtroSistema','filtroMedida','filtroMaterial',
+   'filtroTaperTipo','filtroTaperSerie','filtroTaperBore','filtroTaperCunero']
+    .forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+  document.querySelectorAll('.mov-btn').forEach(b=>b.classList.remove('selected'));
+  selMat=null; selCategoria='tornillo'; selTuerca=null; selRoldana=null;
+  cantTuerca=0; cantRoldana=0; tipoMov=''; tabActual='tornillo';
+  tornillos=[]; tuercas=[]; roldanas=[]; taperlocks=[];
+  listaActiva=[]; taperActiva=[];
+  // Reset tabs visual
+  ['tabTornillo','tabTuerca','tabRoldana','tabTaper'].forEach(id => {
+    document.getElementById(id)?.classList.remove('active');
+  });
+  document.getElementById('tabTornillo')?.classList.add('active');
   setStep(1);
 }
 </script>
 
 <script>
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js').catch(() => {});
-  });
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(()=>{}));
 }
-// Precarga el inventario en segundo plano desde que abre la app
 window.addEventListener('load', () => {
-  setTimeout(() => {
-    if (materiales.length === 0) loadMateriales();
-  }, 800); // espera 800ms para no bloquear el render inicial
+  setTimeout(() => { if (!tornillos.length) loadMateriales(); }, 800);
 });
 </script>
 </body>
